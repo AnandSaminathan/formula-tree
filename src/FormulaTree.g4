@@ -67,7 +67,7 @@ FUTURE      : 'F';
 LOWER_CASE  : 'a'..'z';
 UPPER_CASE  : 'A'..'Z';
 DIGIT       : '0'..'9';
-WS          : (' ' | '\t')+;
+WS          : [ \r\n\t]+ -> skip;
 NL          : ('\n')+;
 DOT         : '.';
 COMMA       : ',';
