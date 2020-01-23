@@ -4,35 +4,36 @@ options {
   tokenVocab = FormulaLexer;
 }
 
-ltl                : (atomicProposition ltlT
-                      | GLOBAL ltl ltlT
-                      | FUTURE ltl ltlT
-                      | NEXT ltl ltlT
-                      | NOT ltl ltlT
-                      | OPEN_PARAN ltl CLOSE_PARAN ltlT);
-
-ltlT               : (<assoc=right>UNTIL ltl
-                      | RELEASE ltl
-                      | AND ltl
-                      | OR ltl
-                      | IMPLIES ltl
-                      | EQUIVALENT ltl)?;
+ltl                : atomicProposition # ltlBase
+                      | OPEN_PARAN ltl CLOSE_PARAN # ltlParanthesis
+                      | GLOBAL ltl # ltlUnary
+                      | FUTURE ltl # ltlUnary
+                      | NEXT ltl # ltlUnary
+                      | NOT ltl # ltlUnary
+                      | <assoc=right>ltl UNTIL ltl # ltlBinary 
+                      | ltl RELEASE ltl # ltlBinary
+                      | ltl AND ltl # ltlBinary
+                      | ltl OR ltl # ltlBinary
+                      | ltl IMPLIES ltl # ltlBinary
+                      | ltl EQUIVALENT ltl # ltlBinary
+                      ;
 
 atomicProposition  : (relationalExpr);
 
-relationalExpr     : (logicalValue | id 
-                      | (arithmeticExpr (LT | GT | LTE | GTE) arithmeticExpr)
-                      | (arithmeticExpr (EQ | NEQ) arithmeticExpr));
+relationalExpr     : logicalValue # relationalValue
+                      | id # relationalId
+                      | arithmeticExpr (LT | GT | LTE | GTE) arithmeticExpr # relationalBinary
+                      | arithmeticExpr (EQ | NEQ) arithmeticExpr # relationalBinarys
+                      ;
 
-arithmeticExpr     : (arithValue arithmeticExprT | id arithmeticExprT
-                      | OPEN_PARAN arithmeticExpr CLOSE_PARAN arithmeticExprT);
-
-arithmeticExprT    : (MOD arithmeticExpr
-                      | DIV arithmeticExpr
-                      | MUL arithmeticExpr
-                      | PLUS arithmeticExpr
-                      | MINUS arithmeticExpr)?;
-
+arithmeticExpr     : arithValue # arithmeticValue
+                      | id # arithmeticId
+                      | OPEN_PARAN arithmeticExpr CLOSE_PARAN # arithmeticParanthesis
+                      | arithmeticExpr MOD arithmeticExpr # arithmeticBinary
+                      | arithmeticExpr DIV arithmeticExpr # arithmeticBinary
+                      | arithmeticExpr MUL arithmeticExpr # arithmeticBinary
+                      | arithmeticExpr (PLUS | MINUS) arithmeticExpr # arithmeticBinary
+                      ;
 
 arithValue         : (integer | decimal);
 logicalValue       : (TRUE | FALSE);
