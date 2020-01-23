@@ -1,4 +1,8 @@
-grammar FormulaTree;
+parser grammar FormulaParser;
+
+options {
+  tokenVocab = FormulaLexer;
+}
 
 ltl                : (atomicProposition ltlT
                       | GLOBAL ltl ltlT
@@ -39,42 +43,4 @@ wholeNumber        : (DIGIT | DIGIT+);
 alpha              : (LOWER_CASE | UPPER_CASE);
 alphaNum           : (alpha | DIGIT);
 newline            : NL;
-
-
-TRUE        : 'true';
-FALSE       : 'false';
-PLUS        : '+';
-MINUS       : '-';
-DIV         : '/';
-MUL         : '*';
-MOD         : '%';
-NOT         : '!';
-AND         : '&&';
-OR          : '||';
-IMPLIES     : '=>';
-EQUIVALENT  : '<=>';
-EQ          : '==';
-NEQ         : '!=';
-GT          : '>';
-LT          : '<';
-GTE         : '>=';
-LTE         : '<=';
-NEXT        : 'X';
-UNTIL       : 'U';
-RELEASE     : 'R';
-GLOBAL      : 'G';
-FUTURE      : 'F';
-LOWER_CASE  : 'a'..'z';
-UPPER_CASE  : 'A'..'Z';
-DIGIT       : '0'..'9';
-WS          : [ \r\n\t]+ -> skip;
-NL          : ('\n')+;
-DOT         : '.';
-COMMA       : ',';
-COLON       : ':';
-SC          : ';';
-OPEN_CURLY  : '{';
-CLOSE_CURLY : '}';
-OPEN_PARAN  : '(';
-CLOSE_PARAN : ')';
 
