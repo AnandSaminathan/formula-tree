@@ -1,0 +1,34 @@
+cmake_minimum_required(VERSION 3.7 FATAL_ERROR)
+
+project(formula-tree)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+set(CMAKE_CXX_STANDARD 11)
+
+add_definitions(-DANTLR4CPP_STATIC)
+
+set(ANTLR4_WITH_STATIC_CRT OFF)
+
+include(ExternalAntlr4Cpp)
+
+include_directories(${ANTLR4_INCLUDE_DIRS})
+
+set(ANTLR_EXECUTABLE ${PROJECT_SOURCE_DIR}/thirdparty/antlr/antlr-4.7.2-complete.jar)
+find_package(ANTLR REQUIRED)
+
+antlr_target(GrammarLexer ${PROJECT_SOURCE_DIR}/src/FormulaLexer.g4 LEXER)
+
+antlr_target(GrammarParser ${PROJECT_SOURCE_DIR}/src/FormulaParser.g4 PARSER
+             DEPENDS_ANTLR GrammarLexer
+             COMPILE_FLAGS -lib ${ANTLR_GrammarLexer_OUTPUT_DIR})
+
+include_directories(${ANTLR_GrammarLexer_OUTPUT_DIR})
+include_directories(${ANTLR_GrammarParser_OUTPUT_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include/formula-tree)
+
+add_executable(formula ${PROJECT_SOURCE_DIR}/tests/test-sample-formula.cpp
+               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
+               ${ANTLR_GrammarParser_CXX_OUTPUTS})
+
+target_link_libraries(formula antlr4_static)

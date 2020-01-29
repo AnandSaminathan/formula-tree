@@ -1,7 +1,7 @@
-parser grammar FormParser;
+parser grammar FormulaParser;
 
 options {
-  tokenVocab = FormLexer;
+  tokenVocab = FormulaLexer;
 }
 
 ltlForm           : atomicProposition # ltlBase

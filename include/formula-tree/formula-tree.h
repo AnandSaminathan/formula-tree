@@ -38,8 +38,6 @@ class FormulaTree {
   public:
     FormulaTree(std::string formula) {
       this->formula = formula;
-
-      constructTree();
     }
 
     std::string getFormula() { return formula; }
@@ -48,7 +46,6 @@ class FormulaTree {
   private:
     FormulaNode *root;
     std::string formula;
-}
-    void constructTree();
 };
+
 
