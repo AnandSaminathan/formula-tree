@@ -1,39 +1,42 @@
-parser grammar FormulaParser;
+parser grammar FormParser;
 
 options {
-  tokenVocab = FormulaLexer;
+  tokenVocab = FormLexer;
 }
 
-ltl                : atomicProposition # ltlBase
-                      | OPEN_PARAN ltl CLOSE_PARAN # ltlParanthesis
-                      | GLOBAL ltl # ltlUnary
-                      | FUTURE ltl # ltlUnary
-                      | NEXT ltl # ltlUnary
-                      | NOT ltl # ltlUnary
-                      | <assoc=right>ltl UNTIL ltl # ltlBinary 
-                      | ltl RELEASE ltl # ltlBinary
-                      | ltl AND ltl # ltlBinary
-                      | ltl OR ltl # ltlBinary
-                      | ltl IMPLIES ltl # ltlBinary
-                      | ltl EQUIVALENT ltl # ltlBinary
-                      ;
+ltlForm           : atomicProposition # ltlBase
+                  | OPEN_PARAN formula=ltlForm CLOSE_PARAN # ltlParanthesis
+                  | op=GLOBAL formula=ltlForm # ltlUnary
+                  | op=FUTURE formula=ltlForm # ltlUnary
+                  | op=NEXT formula=ltlForm # ltlUnary
+                  | op=NOT formula=ltlForm # ltlUnary
+                  | <assoc=right>ltlForm op=UNTIL ltlForm # ltlBinary 
+                  | left=ltlForm op=RELEASE right=ltlForm # ltlBinary
+                  | left=ltlForm op=AND right=ltlForm # ltlBinary
+                  | left=ltlForm op=OR right=ltlForm # ltlBinary
+                  | left=ltlForm op=IMPLIES right=ltlForm # ltlBinary
+                  | left=ltlForm op=EQUIVALENT right=ltlForm # ltlBinary
+                  ;
 
-atomicProposition  : (relationalExpr);
+atomicProposition : relationalForm
+                  ;
 
-relationalExpr     : logicalValue # relationalValue
-                      | id # relationalId
-                      | arithmeticExpr (LT | GT | LTE | GTE) arithmeticExpr # relationalBinary
-                      | arithmeticExpr (EQ | NEQ) arithmeticExpr # relationalBinarys
-                      ;
+relationalForm    : logicalValue # relationalValue
+                  | id # relationalId
+                  | OPEN_PARAN formula=relationalForm CLOSE_PARAN # relationalParanthesis
+                  | left=arithmeticForm op=(LT | GT | LTE | GTE) right=arithmeticForm # relationalBinary
+                  | left=arithmeticForm op=(EQ | NEQ) right=arithmeticForm # relationalBinary
+                  ;
 
-arithmeticExpr     : arithValue # arithmeticValue
-                      | id # arithmeticId
-                      | OPEN_PARAN arithmeticExpr CLOSE_PARAN # arithmeticParanthesis
-                      | arithmeticExpr MOD arithmeticExpr # arithmeticBinary
-                      | arithmeticExpr DIV arithmeticExpr # arithmeticBinary
-                      | arithmeticExpr MUL arithmeticExpr # arithmeticBinary
-                      | arithmeticExpr (PLUS | MINUS) arithmeticExpr # arithmeticBinary
-                      ;
+arithmeticForm    : arithValue # arithmeticValue
+                  | id # arithmeticId
+                  | OPEN_PARAN formula=arithmeticForm CLOSE_PARAN # arithmeticParanthesis
+                  | left=arithmeticForm op=MOD right=arithmeticForm # arithmeticBinary
+                  | left=arithmeticForm op=DIV right=arithmeticForm # arithmeticBinary
+                  | left=arithmeticForm op=MUL right=arithmeticForm # arithmeticBinary
+                  | left=arithmeticForm op=(PLUS | MINUS) right=arithmeticForm # arithmeticBinary
+                  ;
+
 
 arithValue         : (integer | decimal);
 logicalValue       : (TRUE | FALSE);
