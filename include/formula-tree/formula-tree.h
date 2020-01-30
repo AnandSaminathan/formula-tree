@@ -6,23 +6,21 @@
 
 class FormulaNode {
   public:
-    FormulaNode(std::string content, int childrenCount) {
+    FormulaNode(std::string content, std::vector<FormulaNode*> children) {
       this->content = content;
-      this->childrenCount = childrenCount;
-
-      children.resize(childrenCount);
+      this->childrenCount = children.size();
+      this->children = children;
     }
 
-    bool isLeaf() { return (childrenCount == 0); }
+    inline bool isLeaf() { return (childrenCount == 0); }
 
-    std::string getContent() { return content; }
-    std::string getContentType() { return contentType; }
+    inline std::string getContent() { return content; }
+    inline std::string getContentType() { return contentType; }
 
-    int getChildrenCount() { return childrenCount; }
-    FormulaNode getChild(int child) { assertChild(child); return (*children[child]); }
+    inline int getChildrenCount() { return childrenCount; }
+    inline FormulaNode getChild(int child) { assertChild(child); return (*children[child]); }
     
-    void setType(std::string type) { contentType = type; }
-    void setChild(int child, FormulaNode *node) { assertChild(child); children[child] = node; }
+    inline void setType(std::string type) { contentType = type; }
 
   private:
     int childrenCount;
@@ -30,7 +28,7 @@ class FormulaNode {
     std::string contentType;
     std::vector<FormulaNode*> children;
 
-    void assertChild(int child) { assert(child >= 0 && child < childrenCount); }
+    inline void assertChild(int child) { assert(child >= 0 && child < childrenCount); }
 };
 
 
@@ -38,14 +36,16 @@ class FormulaTree {
   public:
     FormulaTree(std::string formula) {
       this->formula = formula;
+      this->constructTree();
     }
 
-    std::string getFormula() { return formula; }
-    FormulaNode getRoot() { return (*root); }
+    inline std::string getFormula() { return formula; }
+    inline FormulaNode getRoot() { return (*root); }
 
   private:
     FormulaNode *root;
     std::string formula;
+    void constructTree();
 };
 
 

@@ -21,15 +21,15 @@ ltlForm           : atomicProposition # ltlBase
 atomicProposition : relationalForm
                   ;
 
-relationalForm    : logicalValue # relationalValue
-                  | id # relationalId
+relationalForm    : value=logicalValue # relationalValue
+                  | name=id # relationalId
                   | OPEN_PARAN formula=relationalForm CLOSE_PARAN # relationalParanthesis
                   | left=arithmeticForm op=(LT | GT | LTE | GTE) right=arithmeticForm # relationalBinary
                   | left=arithmeticForm op=(EQ | NEQ) right=arithmeticForm # relationalBinary
                   ;
 
-arithmeticForm    : arithValue # arithmeticValue
-                  | id # arithmeticId
+arithmeticForm    : value=arithValue # arithmeticValue
+                  | name=id # arithmeticId
                   | OPEN_PARAN formula=arithmeticForm CLOSE_PARAN # arithmeticParanthesis
                   | left=arithmeticForm op=MOD right=arithmeticForm # arithmeticBinary
                   | left=arithmeticForm op=DIV right=arithmeticForm # arithmeticBinary
