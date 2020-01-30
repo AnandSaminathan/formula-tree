@@ -5,7 +5,7 @@
 using namespace antlr4;
 
 int main() {
-  ANTLRInputStream input("G(x -> (y> 10))");
+  ANTLRInputStream input("G((a && !b && !c) || (!a && b && !c) || (!a && !b && c))");
   FormulaLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   FormulaParser parser(&tokens);

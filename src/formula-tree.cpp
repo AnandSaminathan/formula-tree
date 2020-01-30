@@ -1,4 +1,3 @@
-#include "formula-tree.h"
 #include "FormulaLexer.h"
 #include "FormulaParser.h"
 #include "FormulaVisitor.h"

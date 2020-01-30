@@ -3,7 +3,7 @@
 #include "FormulaLexer.h"
 #include "FormulaParser.h"
 #include "FormulaParserBaseVisitor.h"
-#include "formula-tree.h"
+#include "formula-tree/formula-tree.h"
 
 #include "antlr4-runtime.h"
 

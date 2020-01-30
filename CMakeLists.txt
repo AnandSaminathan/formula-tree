@@ -14,7 +14,7 @@ set(ANTLR_EXECUTABLE ${PROJECT_SOURCE_DIR}/thirdparty/antlr/antlr-4.7.2-complete
 include(ExternalAntlr4Cpp)
 
 include_directories(${ANTLR4_INCLUDE_DIRS})
-include_directories(${PROJECT_SOURCE_DIR}/include/formula-tree)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 find_package(ANTLR REQUIRED)
 

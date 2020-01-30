@@ -1,5 +1,5 @@
 #include <iostream>
-#include "formula-tree.h"
+#include "formula-tree/formula-tree.h"
 
 void print(FormulaNode cur) {
   std::cout << cur.getContent();
