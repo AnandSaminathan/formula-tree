@@ -15,7 +15,6 @@ include(ExternalAntlr4Cpp)
 
 include_directories(${ANTLR4_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/include/formula-tree)
-include_directories(${PROJECT_SOURCE_DIR}/src)
 
 find_package(ANTLR REQUIRED)
 
@@ -33,9 +32,14 @@ file(GLOB SOURCE ${PROJECT_SOURCE_DIR}/src/*.h
 		 ${PROJECT_SOURCE_DIR}/src/*.cpp
     )
 
-add_executable(formula ${PROJECT_SOURCE_DIR}/tests/test-formula-tree.cpp
+add_executable(test-sample-formula ${PROJECT_SOURCE_DIR}/tests/test-sample-formula.cpp
                ${ANTLR_GrammarLexer_CXX_OUTPUTS}
                ${ANTLR_GrammarParser_CXX_OUTPUTS}
-	       ${SOURCE})
+               ${SOURCE})
+add_executable(test-formula-tree ${PROJECT_SOURCE_DIR}/tests/test-formula-tree.cpp
+               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
+               ${ANTLR_GrammarParser_CXX_OUTPUTS}
+	             ${SOURCE})
 
-target_link_libraries(formula antlr4_static)
+target_link_libraries(test-sample-formula antlr4_static)
+target_link_libraries(test-formula-tree antlr4_static)
