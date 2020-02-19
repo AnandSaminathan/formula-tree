@@ -3,9 +3,7 @@
 
 void traverse(FormulaNode cur) {
   if(cur.isVal()) {
-    if(cur.getContent() == "10") { assert(cur.getContentType() == "int"); } 
-    else if(cur.getContent() == "12.23") { assert(cur.getContentType() == "real"); }
-    else { assert(false); }
+    assert(cur.getContentType() == "bool");
   }
   int count = cur.getChildrenCount();
   for(int i = 0; i < count; ++i) {
@@ -14,7 +12,7 @@ void traverse(FormulaNode cur) {
 }
 
 int main() {
-  FormulaTree tree("G((x >= 10) -> (y < 12.23))");
+  FormulaTree tree("x == true && y == false && z == false");
   FormulaNode root = tree.getRoot();
   traverse(root);
 }

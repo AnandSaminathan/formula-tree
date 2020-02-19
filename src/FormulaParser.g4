@@ -22,10 +22,11 @@ atomicProposition : relationalForm
                   ;
 
 relationalForm    : value=logicalValue # relationalValue
+                  | formula=arithmeticForm # arithmeticFormula
                   | name=id # relationalId
                   | OPEN_PARAN formula=relationalForm CLOSE_PARAN # relationalParanthesis
-                  | left=arithmeticForm op=(LT | GT | LTE | GTE) right=arithmeticForm # relationalBinary
-                  | left=arithmeticForm op=(EQ | NEQ) right=arithmeticForm # relationalBinary
+                  | left=relationalForm op=(LT | GT | LTE | GTE) right=relationalForm # relationalBinary
+                  | left=relationalForm op=(EQ | NEQ) right=relationalForm # relationalBinary
                   ;
 
 arithmeticForm    : value=arithValue # arithmeticValue
