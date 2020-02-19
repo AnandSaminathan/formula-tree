@@ -45,6 +45,8 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
     antlrcpp::Any visitRelationalValue(FormulaParser::RelationalValueContext *ctx) override {
       std::vector<FormulaNode*> children;
       makeNode((ctx->value)->getText(), children);
+      node->toggleIsVar();
+      node->setType("bool");
 
       return nullptr;
     }
@@ -84,6 +86,20 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
     antlrcpp::Any visitArithmeticValue(FormulaParser::ArithmeticValueContext *ctx) override {
       std::vector<FormulaNode*> children;
       makeNode((ctx->value)->getText(), children);
+      visit(ctx->value);
+      node->toggleIsVar();
+
+      return nullptr;
+    }
+
+    antlrcpp::Any visitInteger(FormulaParser::IntegerContext *ctx) override {
+      node->setType("int");
+
+      return nullptr;
+    }
+
+    antlrcpp::Any visitDecimal(FormulaParser::DecimalContext *ctx) override {
+      node->setType("real");
 
       return nullptr;
     }
