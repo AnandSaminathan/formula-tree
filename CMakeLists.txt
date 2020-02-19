@@ -50,17 +50,12 @@ target_link_libraries(formula-tree antlr4_shared)
 
 add_custom_command(TARGET formula-tree POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  "${PROJECT_SOURCE_DIR}/build/antlr4_runtime/src/antlr4_runtime/runtime/Cpp/dist/libantlr4-runtime.so.4.8"
+  "${ANTLR4_ROOT}/runtime/Cpp/dist/libantlr4-runtime.so.4.8"
   $<TARGET_FILE_DIR:formula-tree>)
 
 add_custom_command(TARGET formula-tree POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  "${PROJECT_SOURCE_DIR}/build/antlr4_runtime/src/antlr4_runtime/runtime/Cpp/dist/libantlr4-runtime.so.4.8"
-  $<TARGET_FILE_DIR:formula-tree>)
-
-add_custom_command(TARGET formula-tree POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  "${PROJECT_SOURCE_DIR}/build/antlr4_runtime/src/antlr4_runtime/runtime/Cpp/dist/libantlr4-runtime.so"
+  "${ANTLR4_ROOT}/runtime/Cpp/dist/libantlr4-runtime.so"
   $<TARGET_FILE_DIR:formula-tree>)
 
 if(WITH_TEST)
