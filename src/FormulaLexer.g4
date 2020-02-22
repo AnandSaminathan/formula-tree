@@ -28,6 +28,7 @@ UPPER_CASE  : 'A'..'Z';
 DIGIT       : '0'..'9';
 WS          : [ \r\n\t]+ -> skip;
 NL          : ('\n')+;
+UNDERSCORE  : '_';
 DOT         : '.';
 COMMA       : ',';
 COLON       : ':';

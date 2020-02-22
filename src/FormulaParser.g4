@@ -41,7 +41,7 @@ arithmeticForm    : value=arithValue # arithmeticValue
 
 arithValue         : (integer | decimal);
 logicalValue       : (TRUE | FALSE);
-id                 : (alpha) alphaNum*;
+id                 : (alpha | UNDERSCORE) (alphaNum | UNDERSCORE)*;
 decimal            : integer DOT wholeNumber;
 integer            : (PLUS | MINUS)? wholeNumber;
 wholeNumber        : (DIGIT | DIGIT+);
