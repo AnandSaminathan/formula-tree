@@ -24,6 +24,7 @@ class FormulaNode {
     inline FormulaNode getChild(int child) { assertChild(child); return (*children[child]); }
     
     inline void setType(std::string type) { contentType = type; }
+    inline void setContent(std::string content) { this->content = content; }
     inline void toggleIsVar() { val = true; }
 
   private:
@@ -44,13 +45,18 @@ class FormulaTree {
       this->constructTree();
     }
 
+    inline void makeNNF() { constructNNF(); }
+
     inline std::string getFormula() { return formula; }
     inline FormulaNode getRoot() { return (*root); }
+    inline FormulaNode getNNFRoot() { return (*nnfRoot); }
 
   private:
     FormulaNode *root;
+    FormulaNode *nnfRoot;
     std::string formula;
     void constructTree();
+    void constructNNF();
 };
 
 
