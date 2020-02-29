@@ -13,6 +13,10 @@ class FormulaNode {
       this->val = false;
     }
 
+    FormulaNode(const FormulaNode& other) {
+      (*this) = other;
+    }
+
     inline bool isLeaf() { return (childrenCount == 0); }
     inline bool isVar() { return isLeaf() && !val; }
     inline bool isVal() { return isLeaf() && val; }
