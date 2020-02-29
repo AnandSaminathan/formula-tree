@@ -22,6 +22,10 @@ add_executable(test-nnf-2 test-nnf-2.cpp
                ${ANTLR_GrammarLexer_CXX_OUTPUTS}
                ${ANTLR_GrammarParser_CXX_OUTPUTS}
                ${SOURCE})
+add_executable(test-nnf-3 test-nnf-3.cpp
+               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
+               ${ANTLR_GrammarParser_CXX_OUTPUTS}
+               ${SOURCE})
 
 target_link_libraries(test-sample-formula antlr4_static)
 target_link_libraries(test-formula-tree antlr4_static)
@@ -29,5 +33,7 @@ target_link_libraries(test-leaf-configs antlr4_static)
 target_link_libraries(test-leaf-configs-2 antlr4_static)
 target_link_libraries(test-nnf antlr4_static)
 target_link_libraries(test-nnf-2 antlr4_static)
+target_link_libraries(test-nnf-3 antlr4_static)
+
 
 

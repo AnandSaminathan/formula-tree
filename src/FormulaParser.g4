@@ -10,7 +10,7 @@ ltlForm           : atomicProposition # ltlBase
                   | op=FUTURE formula=ltlForm # ltlUnary
                   | op=NEXT formula=ltlForm # ltlUnary
                   | op=NOT formula=ltlForm # ltlUnary
-                  | <assoc=right>ltlForm op=UNTIL ltlForm # ltlBinary 
+                  | <assoc=right>left=ltlForm op=UNTIL right=ltlForm # ltlBinary 
                   | left=ltlForm op=RELEASE right=ltlForm # ltlBinary
                   | left=ltlForm op=AND right=ltlForm # ltlBinary
                   | left=ltlForm op=OR right=ltlForm # ltlBinary
