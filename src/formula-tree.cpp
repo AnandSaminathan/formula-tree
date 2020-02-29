@@ -28,6 +28,17 @@ FormulaNode* nnfConstruct(FormulaNode cur, bool negate) {
 
   std::string content = cur.getContent();
   if(content == "!") { return nnfConstruct(cur.getChild(0), !negate); }
+  if(content == "->") {
+    if(negate) {
+      FormulaNode* left = nnfConstruct(cur.getChild(0), !negate);
+      FormulaNode* right = nnfConstruct(cur.getChild(1), negate);
+      return new FormulaNode("&&", {left, right});
+    } else {
+      FormulaNode* left = nnfConstruct(cur.getChild(0), negate);
+      FormulaNode* right = nnfConstruct(cur.getChild(1), !negate);
+      return new FormulaNode("||", {left, right});
+    }
+  }
 
   std::vector<FormulaNode*> children;
   int childrenCount = cur.getChildrenCount();
