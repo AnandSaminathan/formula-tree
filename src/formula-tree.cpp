@@ -25,10 +25,7 @@ void FormulaTree::constructTree() {
 
 FormulaNode* nnfConstruct(FormulaNode cur, bool negate) {
   if(cur.isLeaf()) { 
-    if(!negate) { return new FormulaNode(cur); }
-    else {
-      return new FormulaNode("!", { new FormulaNode(cur) });
-    } 
+    return new FormulaNode(cur);
   }
 
   std::string content = cur.getContent();
@@ -52,7 +49,10 @@ FormulaNode* nnfConstruct(FormulaNode cur, bool negate) {
   if(negate && complement.find(content) != complement.end()) { return new FormulaNode(complement[content], children); } 
   else { 
     FormulaNode* child = new FormulaNode(content, children); 
-    if(negate && content != "()") { return new FormulaNode("!", {child}); }
+    if(negate && content != "()") {
+      FormulaNode* negNode = new FormulaNode("()", {child});
+      return new FormulaNode("!", {negNode}); 
+    }
     else { return child; } 
   }
 

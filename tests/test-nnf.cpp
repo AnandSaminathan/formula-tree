@@ -9,7 +9,7 @@ void print(FormulaNode cur) {
 }
 
 int main() {
-  FormulaTree tree("!G((a && !b && !c) || (!a && b && !c) || (!a && !b && c))");
+  FormulaTree tree("!G((a == true && b == false && c == false) || (a == false && b == true && c == false) || (a == false && b == false && c == true))");
   FormulaNode root = tree.getRoot();
   print(root); std::cout << '\n';
   
