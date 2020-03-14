@@ -27,7 +27,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr;
     }
 
-    antlrcpp::Any visitLtlParanthesis(FormulaParser::LtlParanthesisContext *ctx) override {
+    antlrcpp::Any visitLtlParentheses(FormulaParser::LtlParenthesesContext *ctx) override {
       std::vector<FormulaNode*> children;
       visit(ctx->formula); children.push_back(node);
       makeNode("()", children);
@@ -51,7 +51,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr;
     }
 
-    antlrcpp::Any visitRelationalParanthesis(FormulaParser::RelationalParanthesisContext *ctx) override {
+    antlrcpp::Any visitRelationalParentheses(FormulaParser::RelationalParenthesesContext *ctx) override {
       std::vector<FormulaNode*> children;
       visit(ctx->formula); children.push_back(node);
       makeNode("()", children);    
@@ -68,7 +68,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr;
     }
 
-    antlrcpp::Any visitArithmeticParanthesis(FormulaParser::ArithmeticParanthesisContext *ctx) override {
+    antlrcpp::Any visitArithmeticParentheses(FormulaParser::ArithmeticParenthesesContext *ctx) override {
       std::vector<FormulaNode*> children;
       visit(ctx->formula); children.push_back(node);
       makeNode("()", children);

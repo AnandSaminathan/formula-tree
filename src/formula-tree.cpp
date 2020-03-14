@@ -17,7 +17,7 @@ void FormulaTree::constructTree() {
   CommonTokenStream tokens(&lexer);
   FormulaParser parser(&tokens);
 
-  tree::ParseTree *tree = parser.ltlForm();
+  tree::ParseTree *tree = parser.form();
   FormulaVisitor visitor;
   visitor.visit(tree);
   root = visitor.getNode();

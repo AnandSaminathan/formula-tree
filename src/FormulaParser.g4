@@ -4,8 +4,19 @@ options {
   tokenVocab = FormulaLexer;
 }
 
+form              : (propositionalForm | ltlForm);
+
+propositionalForm : atomicProposition # propBase
+                  | OPEN_PARAN formula=propositionalForm CLOSE_PARAN # propParentheses
+                  | op=NOT formula=propositionalForm # propUnary
+                  | left=propositionalForm op=AND right=propositionalForm # propBinary
+                  | left=propositionalForm op=OR right=propositionalForm # propBinary
+                  | left=propositionalForm op=IMPLIES right=propositionalForm # propBinary
+                  | left=propositionalForm op=EQUIVALENT right=propositionalForm # propBinary
+                  ;
+
 ltlForm           : atomicProposition # ltlBase
-                  | OPEN_PARAN formula=ltlForm CLOSE_PARAN # ltlParanthesis
+                  | OPEN_PARAN formula=ltlForm CLOSE_PARAN # ltlParentheses
                   | op=GLOBAL formula=ltlForm # ltlUnary
                   | op=FUTURE formula=ltlForm # ltlUnary
                   | op=NEXT formula=ltlForm # ltlUnary
@@ -24,14 +35,14 @@ atomicProposition : relationalForm
 relationalForm    : value=logicalValue # relationalValue
                   | formula=arithmeticForm # arithmeticFormula
                   | name=id # relationalId
-                  | OPEN_PARAN formula=relationalForm CLOSE_PARAN # relationalParanthesis
+                  | OPEN_PARAN formula=relationalForm CLOSE_PARAN # relationalParentheses
                   | left=relationalForm op=(LT | GT | LTE | GTE) right=relationalForm # relationalBinary
                   | left=relationalForm op=(EQ | NEQ) right=relationalForm # relationalBinary
                   ;
 
 arithmeticForm    : value=arithValue # arithmeticValue
                   | name=id # arithmeticId
-                  | OPEN_PARAN formula=arithmeticForm CLOSE_PARAN # arithmeticParanthesis
+                  | OPEN_PARAN formula=arithmeticForm CLOSE_PARAN # arithmeticParentheses
                   | left=arithmeticForm op=MOD right=arithmeticForm # arithmeticBinary
                   | left=arithmeticForm op=DIV right=arithmeticForm # arithmeticBinary
                   | left=arithmeticForm op=MUL right=arithmeticForm # arithmeticBinary
