@@ -10,6 +10,31 @@
 class FormulaVisitor : public FormulaParserBaseVisitor {
   public:
 
+    antlrcpp::Any visitPropUnary(FormulaParser::PropUnaryContext *ctx) {
+      std::vector<FormulaNode*> children;
+      visit(ctx->formula); children.push_back(node);
+      makeNode((ctx->op)->getText(), children);
+
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPropBinary(FormulaParser::PropBinaryContext *ctx) override {
+      std::vector<FormulaNode*> children;
+      visit(ctx->left); children.push_back(node);
+      visit(ctx->right); children.push_back(node);
+      makeNode((ctx->op)->getText(), children);
+
+      return nullptr;      
+    }
+
+    antlrcpp::Any visitPropParentheses(FormulaParser::PropParenthesesContext *ctx) override {
+      std::vector<FormulaNode*> children;
+      visit(ctx->formula); children.push_back(node);
+      makeNode("()", children);
+      
+      return nullptr;
+    }
+
     antlrcpp::Any visitLtlUnary(FormulaParser::LtlUnaryContext *ctx) override {
       std::vector<FormulaNode*> children;
       visit(ctx->formula); children.push_back(node);
@@ -114,7 +139,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
     }
 
     antlrcpp::Any visitAtomicProposition(FormulaParser::AtomicPropositionContext *ctx) override {
-      return visit(ctx->relationalForm());
+      visit(ctx->relationalForm());
 
       return nullptr;
     }
