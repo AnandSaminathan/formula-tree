@@ -5,7 +5,8 @@
 using namespace antlr4;
 
 int main() {
-  ANTLRInputStream input("G((a && !b && !c) || (!a && b && !c) || (!a && !b && c))");
+  std::string p1 = "(a == true && b == true)";
+  ANTLRInputStream input(p1);
   FormulaLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   FormulaParser parser(&tokens);

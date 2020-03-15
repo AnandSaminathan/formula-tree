@@ -2,8 +2,6 @@ lexer grammar FormulaLexer;
 
 TRUE        : 'true';
 FALSE       : 'false';
-ATMOST      : 'atmost';
-ATLEAST     : 'atleast';
 PLUS        : '+';
 MINUS       : '-';
 DIV         : '/';

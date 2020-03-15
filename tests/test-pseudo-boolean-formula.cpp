@@ -5,7 +5,10 @@
 using namespace antlr4;
 
 int main() {
-  ANTLRInputStream input("G((a && !b && !c) || (!a && b && !c) || (!a && !b && c))");
+  std::string t1 = "(a == true && b == true)";
+  std::string t2 = "((c == true) -> (d == false))";
+  std::string pseudoBoolean = t1 + " + " + t2 + " == 1"; 
+  ANTLRInputStream input(pseudoBoolean);
   FormulaLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   FormulaParser parser(&tokens);
