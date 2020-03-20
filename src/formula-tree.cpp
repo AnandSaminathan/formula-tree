@@ -69,3 +69,23 @@ void FormulaTree::constructNNF() {
   complement["R"] = "U";
   nnfRoot = nnfConstruct(getRoot(), false);
 }
+
+
+void makeSubstitution(FormulaNode* root, std::map<std::string, std::string>& mapper) {
+  if(root->isVar()) {
+    std::string content = root->getContent();
+    if(mapper.find(content) != mapper.end()) {
+      root->setContent(mapper[content]);
+    }
+    return ;
+  }
+
+  int count = root->getChildrenCount();
+  for(int i = 0; i < count; ++i) {
+    makeSubstitution(root->getPointerToChild(i), mapper);
+  }
+}
+
+void FormulaTree::substitute(std::map<std::string, std::string>& mapper) {
+  makeSubstitution(this->root, mapper);
+}
