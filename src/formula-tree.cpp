@@ -48,12 +48,7 @@ FormulaNode* nnfConstruct(FormulaNode cur, bool negate) {
 
   if(negate && complement.find(content) != complement.end()) { return new FormulaNode(complement[content], children); } 
   else { 
-    FormulaNode* child = new FormulaNode(content, children); 
-    if(negate && content != "()") {
-      FormulaNode* negNode = new FormulaNode("()", {child});
-      return new FormulaNode("!", {negNode}); 
-    }
-    else { return child; } 
+    return new FormulaNode(content, children); 
   }
 
   return nullptr;
@@ -67,6 +62,12 @@ void FormulaTree::constructNNF() {
   complement["X"] = "X";
   complement["U"] = "R";
   complement["R"] = "U";
+  complement[">="] = "<";
+  complement["<="] = ">";
+  complement[">"] = "<=";
+  complement["<"] = ">=";
+  complement["=="] = "!=";
+  complement["!="] = "==";
   nnfRoot = nnfConstruct(getRoot(), false);
 }
 
