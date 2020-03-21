@@ -53,7 +53,7 @@ class FormulaTree {
 
     inline void makeNNF() { constructNNF(); }
 
-    inline std::string getFormula() { return formula; }
+    inline std::string getFormula() { return toString((*root)); }
     inline FormulaNode getRoot() { return (*root); }
     inline FormulaNode getNNFRoot() { return (*nnfRoot); }
     void substitute(std::map<std::string, std::string>&);
@@ -64,6 +64,7 @@ class FormulaTree {
     std::string formula;
     void constructTree();
     void constructNNF();
+    std::string toString(FormulaNode);
 };
 
 

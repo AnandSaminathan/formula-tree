@@ -70,6 +70,26 @@ void FormulaTree::constructNNF() {
   nnfRoot = nnfConstruct(getRoot(), false);
 }
 
+std::string FormulaTree::toString(FormulaNode root) {
+  if(root.isLeaf()) return (root.getContent());
+
+  std::string content = root.getContent();
+  int childrenCount = root.getChildrenCount();
+
+  switch(childrenCount) {
+    case 1: {
+      if(content == "()") { return "(" + toString(root.getChild(0)) + ")"; } 
+      else { return content + toString(root.getChild(0)); }
+    } break;
+
+    case 2: {
+      return toString(root.getChild(0)) + content + toString(root.getChild(1));
+    } break;
+
+    default : assert(childrenCount <= 2);
+  }
+}
+
 
 void makeSubstitution(FormulaNode* root, std::map<std::string, std::string>& mapper) {
   if(root->isVar()) {
@@ -88,4 +108,5 @@ void makeSubstitution(FormulaNode* root, std::map<std::string, std::string>& map
 
 void FormulaTree::substitute(std::map<std::string, std::string>& mapper) {
   makeSubstitution(this->root, mapper);
+  this->formula = toString(getRoot());
 }

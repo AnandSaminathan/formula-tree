@@ -11,11 +11,16 @@ void print(FormulaNode cur) {
 int main() {
   FormulaTree tree("G(t1)");
   FormulaNode root = tree.getRoot(); 
+  std::cout << "Tree: ";
   print(root);
   std::cout << '\n';
+  std::cout << "String: " << tree.getFormula() << '\n';
   std::map<std::string, std::string> mapper;
   mapper["t1"] = "(a > 2) && (next_a == 2 && next_ b == 1)";
   tree.substitute(mapper);
+  std::cout << "Substituted tree: ";
   print(tree.getRoot());
   std::cout << '\n';
+  std::string formula = tree.getFormula();
+  std::cout << "Substituted string: " << formula << '\n';
 }
