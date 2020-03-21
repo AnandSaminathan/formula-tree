@@ -23,4 +23,5 @@ int main() {
   std::cout << '\n';
   std::string formula = tree.getFormula();
   std::cout << "Substituted string: " << formula << '\n';
+  assert((root.getChild(0)).getChild(0).getContent() == "&&");
 }

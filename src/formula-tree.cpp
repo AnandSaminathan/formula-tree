@@ -94,9 +94,8 @@ std::string FormulaTree::toString(FormulaNode root) {
 void makeSubstitution(FormulaNode* root, std::map<std::string, std::string>& mapper) {
   if(root->isVar()) {
     std::string content = root->getContent();
-    if(mapper.find(content) != mapper.end()) {
-      root->setContent(mapper[content]);
-    }
+    FormulaTree subTree(mapper[content]);
+    (*root) = subTree.getRoot();
     return ;
   }
 

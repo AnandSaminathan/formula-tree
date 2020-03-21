@@ -55,6 +55,7 @@ class FormulaTree {
 
     inline std::string getFormula() { return toString((*root)); }
     inline FormulaNode getRoot() { return (*root); }
+    inline FormulaNode* getPointerToRoot() { return (root); }
     inline FormulaNode getNNFRoot() { return (*nnfRoot); }
     void substitute(std::map<std::string, std::string>&);
 
