@@ -38,6 +38,10 @@ add_executable(test-substitute test-substitute.cpp
                ${ANTLR_GrammarLexer_CXX_OUTPUTS}
                ${ANTLR_GrammarParser_CXX_OUTPUTS}
                ${SOURCE})
+add_executable(test-substitute-2 test-substitute-2.cpp
+               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
+               ${ANTLR_GrammarParser_CXX_OUTPUTS}
+               ${SOURCE})
 
 
 target_link_libraries(test-sample-formula antlr4_static)
@@ -50,3 +54,5 @@ target_link_libraries(test-nnf-3 antlr4_static)
 target_link_libraries(test-pseudo-boolean-formula antlr4_static)
 target_link_libraries(test-propositional-formula antlr4_static)
 target_link_libraries(test-substitute antlr4_static)
+target_link_libraries(test-substitute-2 antlr4_static)
+
