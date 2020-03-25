@@ -2,17 +2,17 @@
 #define formula_tree
 
 #include <string>
-#include <vector>
 #include <map>
 #include <memory>
+#include <algorithm>
 #include <assert.h>
 
 class FormulaNode {
   public:
-    FormulaNode(std::string& content, std::vector<std::shared_ptr<FormulaNode>>& children)
+    FormulaNode(std::string& content, std::shared_ptr<std::shared_ptr<FormulaNode>[]>& children, int childrenCount)
     : content(std::move(content)),
       children(children),
-      childrenCount(children.size()) { }
+      childrenCount(childrenCount) { }
 
     FormulaNode(const FormulaNode& other) {
       (*this) = other;
@@ -38,7 +38,7 @@ class FormulaNode {
     int childrenCount;
     std::string content;
     std::string contentType;
-    std::vector<std::shared_ptr<FormulaNode>> children;
+    std::shared_ptr<std::shared_ptr<FormulaNode>[]> children;
 
     inline void assertChild(int child) { assert(child >= 0 && child < childrenCount); }
 };

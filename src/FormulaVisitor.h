@@ -11,65 +11,65 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
   public:
 
     antlrcpp::Any visitPropUnary(FormulaParser::PropUnaryContext *ctx) {
-      std::vector<std::shared_ptr<FormulaNode>> children(1);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[1]);
       visit(ctx->formula); children[0] = node;
-      makeNode((ctx->op)->getText(), children);
+      makeNode((ctx->op)->getText(), children, 1);
 
       return nullptr;
     }
 
     antlrcpp::Any visitPropBinary(FormulaParser::PropBinaryContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(2);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
       visit(ctx->left); children[0] = node;
       visit(ctx->right); children[1] = node;
-      makeNode((ctx->op)->getText(), children);
+      makeNode((ctx->op)->getText(), children, 2);
 
       return nullptr;      
     }
 
     antlrcpp::Any visitPropParentheses(FormulaParser::PropParenthesesContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(1);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[1]);
       visit(ctx->formula); children[0] = node;
-      makeNode("()", children);
+      makeNode("()", children, 1);
       
       return nullptr;
     }
 
     antlrcpp::Any visitLtlUnary(FormulaParser::LtlUnaryContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(1);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[1]);
       visit(ctx->formula); children[0] = node;
-      makeNode((ctx->op)->getText(), children);
+      makeNode((ctx->op)->getText(), children, 1);
 
       return nullptr;
     }
 
     antlrcpp::Any visitLtlBinary(FormulaParser::LtlBinaryContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(2);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
       visit(ctx->left); children[0] = node;
       visit(ctx->right); children[1] = node;
-      makeNode((ctx->op)->getText(), children);
+      makeNode((ctx->op)->getText(), children, 2);
 
       return nullptr;
     }
 
     antlrcpp::Any visitLtlParentheses(FormulaParser::LtlParenthesesContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(1);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[1]);
       visit(ctx->formula); children[0] = node;
-      makeNode(parenthesis, children);
+      makeNode(parenthesis, children, 1);
 
       return nullptr;
     }
 
     antlrcpp::Any visitRelationalId(FormulaParser::RelationalIdContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children;
-      makeNode((ctx->name)->getText(), children);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children;
+      makeNode((ctx->name)->getText(), children, 0);
 
       return nullptr;
     }
 
     antlrcpp::Any visitRelationalValue(FormulaParser::RelationalValueContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children;
-      makeNode((ctx->value)->getText(), children);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children;
+      makeNode((ctx->value)->getText(), children, 0);
       node->toggleIsVar();
       node->setType("bool");
 
@@ -77,40 +77,40 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
     }
 
     antlrcpp::Any visitRelationalParentheses(FormulaParser::RelationalParenthesesContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(1);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[1]);
       visit(ctx->formula); children[0] = node;
-      makeNode(parenthesis, children);    
+      makeNode(parenthesis, children, 1);    
 
       return nullptr;
     }
 
     antlrcpp::Any visitRelationalBinary(FormulaParser::RelationalBinaryContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(2);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
       visit(ctx->left); children[0] = node;
       visit(ctx->right); children[1] = node;
-      makeNode((ctx->op)->getText(), children);
+      makeNode((ctx->op)->getText(), children, 2);
 
       return nullptr;
     }
 
     antlrcpp::Any visitArithmeticParentheses(FormulaParser::ArithmeticParenthesesContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(1);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[1]);
       visit(ctx->formula); children[0] = node;
-      makeNode(parenthesis, children);
+      makeNode(parenthesis, children, 1);
 
       return nullptr;
     }
 
     antlrcpp::Any visitArithmeticId(FormulaParser::ArithmeticIdContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children;
-      makeNode((ctx->name)->getText(), children);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children;
+      makeNode((ctx->name)->getText(), children, 0);
 
       return nullptr;
     }
 
     antlrcpp::Any visitArithmeticValue(FormulaParser::ArithmeticValueContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children;
-      makeNode((ctx->value)->getText(), children);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children;
+      makeNode((ctx->value)->getText(), children, 0);
       visit(ctx->value);
       node->toggleIsVar();
 
@@ -130,10 +130,10 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
     }
 
     antlrcpp::Any visitArithmeticBinary(FormulaParser::ArithmeticBinaryContext *ctx) override {
-      std::vector<std::shared_ptr<FormulaNode>> children(2);
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
       visit(ctx->left); children[0] = node;
       visit(ctx->right); children[1] = node;
-      makeNode((ctx->op)->getText(), children);
+      makeNode((ctx->op)->getText(), children, 2);
 
       return nullptr;
     }
@@ -153,7 +153,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
     std::shared_ptr<FormulaNode> node;
     std::string parenthesis{"()"};
 
-    void makeNode(std::string content, std::vector<std::shared_ptr<FormulaNode>> children) {
-      node.reset(new FormulaNode(content, children));
+    inline void makeNode(std::string content, std::shared_ptr<std::shared_ptr<FormulaNode>[]> children, int count) {
+      node.reset(new FormulaNode(content, children, count));
     }
 };

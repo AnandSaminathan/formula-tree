@@ -42,17 +42,18 @@ std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
       right = nnfConstruct(cur.getChild(1), !negate);
       op = "||";
     }
-    std::vector<std::shared_ptr<FormulaNode>> children({left, right});
-    return std::shared_ptr<FormulaNode>(new FormulaNode(op, children));
+    std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
+    children[0] = left; children[1] = right;
+    return std::shared_ptr<FormulaNode>(new FormulaNode(op, children, 2));
   }
 
-  std::vector<std::shared_ptr<FormulaNode>> children;
   int childrenCount = cur.getChildrenCount();
-  for(int i = 0; i < childrenCount; ++i) { children.emplace_back(nnfConstruct(cur.getChild(i), negate)); }
+  std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[childrenCount]);
+  for(int i = 0; i < childrenCount; ++i) { children[i] = nnfConstruct(cur.getChild(i), negate); }
 
-  if(negate && complement.find(content) != complement.end()) { return std::shared_ptr<FormulaNode>(new FormulaNode(complement[content],children)); } 
+  if(negate && complement.find(content) != complement.end()) { return std::shared_ptr<FormulaNode>(new FormulaNode(complement[content], children, childrenCount)); } 
   else { 
-    return std::shared_ptr<FormulaNode>(new FormulaNode(content, children)); 
+    return std::shared_ptr<FormulaNode>(new FormulaNode(content, children, childrenCount)); 
   }
 
   return nullptr;
