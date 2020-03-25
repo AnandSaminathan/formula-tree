@@ -4,10 +4,8 @@ options {
   tokenVocab = FormulaLexer;
 }
 
-form              : propositionalForm 
-                    | pseudoBooleanForm
-                    | ltlForm
-                    ;
+form              : ltlForm
+                  ;
 
 propositionalForm : atomicProposition                                             #propBase
                   | OPEN_PARAN formula=propositionalForm CLOSE_PARAN              #propParentheses
@@ -21,7 +19,7 @@ propositionalForm : atomicProposition                                           
 pseudoBooleanForm : (sign=(PLUS | MINUS))? (coeff=wholeNumber MUL)? formula=propositionalForm (pseudoProposition)* rop=(LT | GT | LTE | GTE | EQ | NEQ) constraint=wholeNumber;
 
 
-ltlForm           : atomicProposition                                 #ltlBase
+ltlForm           : relationalForm                                    #ltlBase
                   | OPEN_PARAN formula=ltlForm CLOSE_PARAN            #ltlParentheses
                   | op=GLOBAL formula=ltlForm                         #ltlUnary
                   | op=FUTURE formula=ltlForm                         #ltlUnary
