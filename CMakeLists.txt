@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "-Wdeprecated -Wno-attributes" )
 add_definitions(-DANTLR4CPP_SHARED)
 
 set(ANTLR4_WITH_STATIC_CRT OFF)
-set(ANTLR_EXECUTABLE ${PROJECT_SOURCE_DIR}/thirdparty/antlr/antlr-4.7.2-complete.jar)
+set(ANTLR_EXECUTABLE ${PROJECT_SOURCE_DIR}/thirdparty/antlr/antlr-4.8-complete.jar)
 
 include(ExternalAntlr4Cpp)
 include(GNUInstallDirs)

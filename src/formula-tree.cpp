@@ -23,32 +23,36 @@ void FormulaTree::constructTree() {
   root = visitor.getNode();
 }
 
-FormulaNode* nnfConstruct(FormulaNode cur, bool negate) {
+std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
   if(cur.isLeaf()) { 
-    return new FormulaNode(cur);
+    return std::shared_ptr<FormulaNode>(new FormulaNode(cur));
   }
 
   std::string content = cur.getContent();
   if(content == "!") { return nnfConstruct(cur.getChild(0), !negate); }
   if(content == "->") {
+    std::shared_ptr<FormulaNode> left, right;
+    std::string op;
     if(negate) {
-      FormulaNode* left = nnfConstruct(cur.getChild(0), !negate);
-      FormulaNode* right = nnfConstruct(cur.getChild(1), negate);
-      return new FormulaNode("&&", {left, right});
+      left = nnfConstruct(cur.getChild(0), !negate);
+      right = nnfConstruct(cur.getChild(1), negate);
+      op = "&&";
     } else {
-      FormulaNode* left = nnfConstruct(cur.getChild(0), negate);
-      FormulaNode* right = nnfConstruct(cur.getChild(1), !negate);
-      return new FormulaNode("||", {left, right});
+      left = nnfConstruct(cur.getChild(0), negate);
+      right = nnfConstruct(cur.getChild(1), !negate);
+      op = "||";
     }
+    std::vector<std::shared_ptr<FormulaNode>> children({left, right});
+    return std::shared_ptr<FormulaNode>(new FormulaNode(op, children));
   }
 
-  std::vector<FormulaNode*> children;
+  std::vector<std::shared_ptr<FormulaNode>> children;
   int childrenCount = cur.getChildrenCount();
   for(int i = 0; i < childrenCount; ++i) { children.emplace_back(nnfConstruct(cur.getChild(i), negate)); }
 
-  if(negate && complement.find(content) != complement.end()) { return new FormulaNode(complement[content], children); } 
+  if(negate && complement.find(content) != complement.end()) { return std::shared_ptr<FormulaNode>(new FormulaNode(complement[content],children)); } 
   else { 
-    return new FormulaNode(content, children); 
+    return std::shared_ptr<FormulaNode>(new FormulaNode(content, children)); 
   }
 
   return nullptr;
@@ -92,7 +96,7 @@ std::string FormulaTree::toString(FormulaNode root) {
 }
 
 
-void makeSubstitution(FormulaNode* root, std::map<std::string, std::string>& mapper) {
+void makeSubstitution(std::shared_ptr<FormulaNode> root, std::map<std::string, std::string>& mapper) {
   if(root->isVar()) {
     std::string content = root->getContent();
     if(mapper.find(content) != mapper.end()) {
