@@ -1,4 +1,5 @@
-#pragma once
+#ifndef formula_tree
+#define formula_tree
 
 #include <string>
 #include <vector>
@@ -67,4 +68,5 @@ class FormulaTree {
     std::string toString(FormulaNode);
 };
 
+#endif
 
