@@ -1,8 +1,11 @@
 #include <iostream>
 #include "formula-tree/formula-tree.h"
 
+std::string curString;
+
 void print(FormulaNode cur) {
   std::cout << cur.getContent();
+  curString += cur.getContent();
   for(int i = 0; i < cur.getChildrenCount(); ++i) {
     print(cur.getChild(i));
   }
@@ -15,5 +18,7 @@ int main() {
   
   tree.makeNNF();
   FormulaNode nnfRoot = tree.getNNFRoot();
+  curString = "";
   print(nnfRoot); std::cout << '\n';
+  assert(curString == "F()&&&&()||||!=atrue!=bfalse!=cfalse()||||!=afalse!=btrue!=cfalse()||||!=afalse!=bfalse!=ctrue");
 }

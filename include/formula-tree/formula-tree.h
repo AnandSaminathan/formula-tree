@@ -10,7 +10,7 @@
 class FormulaNode {
   public:
     FormulaNode(std::string& content, std::shared_ptr<std::shared_ptr<FormulaNode>[]>& children, int childrenCount)
-    : content(std::move(content)),
+    : content(content),
       children(children),
       childrenCount(childrenCount) { }
 
@@ -47,7 +47,7 @@ class FormulaNode {
 class FormulaTree {
   public:
     FormulaTree(std::string formula)
-    : formula(std::move(formula)) {
+    : formula(formula) {
       this->constructTree();
     }
 

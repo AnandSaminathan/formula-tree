@@ -38,6 +38,7 @@ file(GLOB SOURCE ${PROJECT_SOURCE_DIR}/src/*.h
 add_library(formula-tree SHARED 
             ${PROJECT_SOURCE_DIR}/src/formula-tree.cpp
             ${PROJECT_SOURCE_DIR}/src/FormulaVisitor.h
+            ${PROJECT_SOURCE_DIR}/src/FormulaVisitor.cpp
             ${ANTLR_GrammarLexer_CXX_OUTPUTS}
             ${ANTLR_GrammarParser_CXX_OUTPUTS})
 

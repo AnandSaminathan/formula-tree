@@ -51,8 +51,9 @@ std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
   std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[childrenCount]);
   for(int i = 0; i < childrenCount; ++i) { children[i] = nnfConstruct(cur.getChild(i), negate); }
 
-  if(negate && complement.find(content) != complement.end()) { return std::shared_ptr<FormulaNode>(new FormulaNode(complement[content], children, childrenCount)); } 
-  else { 
+  if(negate && complement.find(content) != complement.end()) { 
+    return std::shared_ptr<FormulaNode>(new FormulaNode(complement[content], children, childrenCount)); 
+  } else { 
     return std::shared_ptr<FormulaNode>(new FormulaNode(content, children, childrenCount)); 
   }
 
