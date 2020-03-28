@@ -1,6 +1,6 @@
 #pragma once
 
-#pragma GCC optimize("O3")
+// #pragma GCC optimize("O3")
 
 #include "FormulaLexer.h"
 #include "FormulaParser.h"
