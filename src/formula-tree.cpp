@@ -8,6 +8,7 @@
 #include <map>
 
 using namespace antlr4;
+using namespace antlr4::atn;
 
 std::map<std::string, std::string> complement;
 
@@ -15,7 +16,9 @@ void FormulaTree::constructTree() {
   ANTLRInputStream input(this->formula);
   FormulaLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
+  tokens.fill();
   FormulaParser parser(&tokens);
+  parser.getInterpreter<ParserATNSimulator>()->setPredictionMode(PredictionMode::SLL);
 
   tree::ParseTree *tree = parser.form();
   FormulaVisitor visitor;

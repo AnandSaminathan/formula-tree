@@ -7,18 +7,6 @@ options {
 form              : ltlForm
                   ;
 
-propositionalForm : atomicProposition                                             #propBase
-                  | OPEN_PARAN formula=propositionalForm CLOSE_PARAN              #propParentheses
-                  | op=NOT formula=propositionalForm                              #propUnary
-                  | left=propositionalForm op=AND right=propositionalForm         #propBinary
-                  | left=propositionalForm op=OR right=propositionalForm          #propBinary
-                  | left=propositionalForm op=IMPLIES right=propositionalForm     #propBinary
-                  | left=propositionalForm op=EQUIVALENT right=propositionalForm  #propBinary
-                  ;
-
-pseudoBooleanForm : (sign=(PLUS | MINUS))? (coeff=wholeNumber MUL)? formula=propositionalForm (pseudoProposition)* rop=(LT | GT | LTE | GTE | EQ | NEQ) constraint=wholeNumber;
-
-
 ltlForm           : relationalForm                                    #ltlBase
                   | OPEN_PARAN formula=ltlForm CLOSE_PARAN            #ltlParentheses
                   | op=GLOBAL formula=ltlForm                         #ltlUnary
@@ -33,21 +21,16 @@ ltlForm           : relationalForm                                    #ltlBase
                   | left=ltlForm op=EQUIVALENT right=ltlForm          #ltlBinary
                   ;
 
-pseudoProposition : (sign=(PLUS | MINUS))? (coeff=wholeNumber MUL)? formula=propositionalForm;
-
-atomicProposition : relationalForm
-                  ;
-
-relationalForm    : value=logicalValue                                                #relationalValue
-                  | formula=arithmeticForm                                            #arithmeticFormula
-                  | name=id                                                           #relationalId
+relationalForm    : content=logicalValue                                              #relationalValue
+                  | arithmeticForm                                                    #arithmeticFormula
+                  | content=id                                                        #relationalId
                   | OPEN_PARAN formula=relationalForm CLOSE_PARAN                     #relationalParentheses
                   | left=relationalForm op=(LT | GT | LTE | GTE) right=relationalForm #relationalBinary
                   | left=relationalForm op=(EQ | NEQ) right=relationalForm            #relationalBinary
                   ;
 
-arithmeticForm    : value=arithValue                                            #arithmeticValue
-                  | name=id                                                     #arithmeticId
+arithmeticForm    : content=arithValue                                          #arithmeticValue
+                  | content=id                                                  #arithmeticId
                   | OPEN_PARAN formula=arithmeticForm CLOSE_PARAN               #arithmeticParentheses
                   | left=arithmeticForm op=MOD right=arithmeticForm             #arithmeticBinary
                   | left=arithmeticForm op=DIV right=arithmeticForm             #arithmeticBinary
@@ -56,13 +39,10 @@ arithmeticForm    : value=arithValue                                            
                   ;
 
 
-arithValue         : (integer | decimal);
 logicalValue       : (TRUE | FALSE);
-id                 : (alpha | UNDERSCORE) (alphaNum | UNDERSCORE)*;
+arithValue         : (integer | decimal);
+id                 : (LOWER_CASE | UPPER_CASE | UNDERSCORE) (LOWER_CASE | UPPER_CASE | DIGIT | UNDERSCORE)*;
 decimal            : integer DOT wholeNumber;
 integer            : (PLUS | MINUS)? wholeNumber;
 wholeNumber        : (DIGIT | DIGIT+);
-alpha              : (LOWER_CASE | UPPER_CASE);
-alphaNum           : (alpha | DIGIT);
-newline            : NL;
 
