@@ -11,8 +11,11 @@ void print(FormulaNode cur) {
 }
 
 int main() {
-  FormulaTree tree("G((x >= 10) -> y)");
+  std::string t1 = "(a == true && b == true)";
+  std::string t2 = "((c == true) -> (d == false))";
+  std::string pseudoBoolean = t1 + " + " + t2 + " == 1"; 
+  FormulaTree tree(pseudoBoolean);
   FormulaNode root = tree.getRoot();
   print(root);
-  assert(content == "G()->()>=x10y");
+  assert(content == "==+()&&==atrue==btrue()->()==ctrue()==dfalse1");
 }

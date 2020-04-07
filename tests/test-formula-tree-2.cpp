@@ -11,8 +11,9 @@ void print(FormulaNode cur) {
 }
 
 int main() {
-  FormulaTree tree("G((x >= 10) -> y)");
+  std::string p1 = "(a == true && b == true)";
+  FormulaTree tree(p1);
   FormulaNode root = tree.getRoot();
   print(root);
-  assert(content == "G()->()>=x10y");
+  assert(content == "()&&==atrue==btrue");
 }

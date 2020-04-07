@@ -1,7 +1,5 @@
 #pragma once
 
-// #pragma GCC optimize("O3")
-
 #include "FormulaLexer.h"
 #include "FormulaParser.h"
 #include "FormulaParserBaseVisitor.h"
@@ -11,6 +9,50 @@
 
 class FormulaVisitor : public FormulaParserBaseVisitor {
   public:
+
+    antlrcpp::Any visitPropUnary(FormulaParser::PropUnaryContext *ctx) override {
+      handleUnary(ctx);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPropBinary(FormulaParser::PropBinaryContext *ctx) override {
+      handleBinary(ctx);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPropParentheses(FormulaParser::PropParenthesesContext *ctx) override {
+      handleParenthesis(ctx);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPseudoBoolBinary(FormulaParser::PseudoBoolBinaryContext *ctx) override {
+      handleBinary(ctx);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPseudoArithBase(FormulaParser::PseudoArithBaseContext *ctx) override {
+      visit(ctx->propForm());
+      auto coeff = ctx->wholeNumber();
+      if(coeff != nullptr) {
+        std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
+        std::shared_ptr<std::shared_ptr<FormulaNode>[]> empty;
+        children[0].reset(new FormulaNode(coeff->getText(), empty, 0));
+        children[0]->setType("int");
+        children[1] = node;
+        node.reset(new FormulaNode("*", children, 2));
+      }
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPseudoArithBinary(FormulaParser::PseudoArithBinaryContext *ctx) override {
+      handleBinary(ctx);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPseudoArithParentheses(FormulaParser::PseudoArithParenthesesContext *ctx) override {
+      handleParenthesis(ctx);
+      return nullptr;
+    }
 
     antlrcpp::Any visitLtlUnary(FormulaParser::LtlUnaryContext *ctx) override { 
       handleUnary(ctx); 
@@ -78,6 +120,12 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
 
     antlrcpp::Any visitDecimal(FormulaParser::DecimalContext *ctx) override {
       node->setType("real");
+      return nullptr;
+    }
+
+    antlrcpp::Any visitWholeNumber(FormulaParser::WholeNumberContext *ctx) override {\
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> empty;
+      node.reset(new FormulaNode((ctx->getText()), empty, 0));
       return nullptr;
     }
 

@@ -4,8 +4,30 @@ options {
   tokenVocab = FormulaLexer;
 }
 
-form              : ltlForm
+form              : propForm
+                  | pseudoBoolForm
+                  | ltlForm
                   ;
+
+propForm          : relationalForm                              #propBase
+                  | OPEN_PARAN formula=propForm CLOSE_PARAN     #propParentheses
+                  | op=NOT formula=propForm                     #propUnary
+                  | left=propForm op=AND right=propForm         #propBinary
+                  | left=propForm op=OR right=propForm          #propBinary
+                  | left=propForm op=IMPLIES right=propForm     #propBinary
+                  | left=propForm op=EQUIVALENT right=propForm  #propBinary
+                  ;
+
+pseudoBoolForm    : pseudoBoolArith                                                           #pseudoBoolBase
+                  | left=pseudoBoolForm op=(LT | GT | LTE | GTE | EQ | NEQ) right=wholeNumber #pseudoBoolBinary
+                  ;
+
+
+pseudoBoolArith   : (wholeNumber MUL)? propForm                                   #pseudoArithBase 
+                  | OPEN_PARAN formula=pseudoBoolArith CLOSE_PARAN                #pseudoArithParentheses
+                  | left=pseudoBoolArith op=(PLUS | MINUS) right=pseudoBoolArith  #pseudoArithBinary
+                  ;
+
 
 ltlForm           : relationalForm                                    #ltlBase
                   | OPEN_PARAN formula=ltlForm CLOSE_PARAN            #ltlParentheses
