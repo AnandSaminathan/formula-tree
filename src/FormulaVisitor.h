@@ -12,21 +12,25 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
 
     antlrcpp::Any visitPropUnary(FormulaParser::PropUnaryContext *ctx) override {
       handleUnary(ctx);
+      node->setSubTreeType(pl);
       return nullptr;
     }
 
     antlrcpp::Any visitPropBinary(FormulaParser::PropBinaryContext *ctx) override {
       handleBinary(ctx);
+      node->setSubTreeType(pl);
       return nullptr;
     }
 
     antlrcpp::Any visitPropParentheses(FormulaParser::PropParenthesesContext *ctx) override {
       handleParenthesis(ctx);
+      node->setSubTreeType(pl);
       return nullptr;
     }
 
     antlrcpp::Any visitPseudoBoolBinary(FormulaParser::PseudoBoolBinaryContext *ctx) override {
       handleBinary(ctx);
+      node->setSubTreeType(pb);
       return nullptr;
     }
 
@@ -41,41 +45,49 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
         children[1] = node;
         node.reset(new FormulaNode("*", children, 2));
       }
+      node->setSubTreeType(pb);
       return nullptr;
     }
 
     antlrcpp::Any visitPseudoArithBinary(FormulaParser::PseudoArithBinaryContext *ctx) override {
       handleBinary(ctx);
+      node->setSubTreeType(pb);
       return nullptr;
     }
 
     antlrcpp::Any visitPseudoArithParentheses(FormulaParser::PseudoArithParenthesesContext *ctx) override {
       handleParenthesis(ctx);
+      node->setSubTreeType(pb);
       return nullptr;
     }
 
     antlrcpp::Any visitLtlUnary(FormulaParser::LtlUnaryContext *ctx) override { 
       handleUnary(ctx); 
+      node->setSubTreeType(ltl);
       return nullptr; 
     }
 
     antlrcpp::Any visitLtlBinary(FormulaParser::LtlBinaryContext *ctx) override { 
       handleBinary(ctx); 
+      node->setSubTreeType(ltl);
       return nullptr; 
     }
 
     antlrcpp::Any visitLtlParentheses(FormulaParser::LtlParenthesesContext *ctx) override {
       handleParenthesis(ctx);
+      node->setSubTreeType(ltl);
       return nullptr;
     }
 
     antlrcpp::Any visitRelationalId(FormulaParser::RelationalIdContext *ctx) override {
       handleBase(ctx);
+      node->setSubTreeType(rel);
       return nullptr;
     }
 
     antlrcpp::Any visitRelationalValue(FormulaParser::RelationalValueContext *ctx) override {
       handleBase(ctx);
+      node->setSubTreeType(rel);
       node->toggleVal();
       node->setType("bool");
       return nullptr;
@@ -83,21 +95,25 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
 
     antlrcpp::Any visitRelationalParentheses(FormulaParser::RelationalParenthesesContext *ctx) override { 
       handleParenthesis(ctx); 
+      node->setSubTreeType(rel);
       return nullptr; 
     }
 
     antlrcpp::Any visitRelationalBinary(FormulaParser::RelationalBinaryContext *ctx) override {
       handleBinary(ctx);
+      node->setSubTreeType(rel);
       return nullptr;
     }
 
     antlrcpp::Any visitArithmeticParentheses(FormulaParser::ArithmeticParenthesesContext *ctx) override {
       handleParenthesis(ctx);
+      node->setSubTreeType(arith);
       return nullptr;
     }
 
     antlrcpp::Any visitArithmeticId(FormulaParser::ArithmeticIdContext *ctx) override {
       handleBase(ctx);
+      node->setSubTreeType(arith);
       return nullptr;
     }
 
@@ -105,11 +121,13 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       handleBase(ctx);
       visit(ctx->content);
       node->toggleVal();
+      node->setSubTreeType(arith);
       return nullptr;
     }
 
     antlrcpp::Any visitArithmeticBinary(FormulaParser::ArithmeticBinaryContext *ctx) override {
       handleBinary(ctx);
+      node->setSubTreeType(arith);
       return nullptr;
     }
 
@@ -126,6 +144,8 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
     antlrcpp::Any visitWholeNumber(FormulaParser::WholeNumberContext *ctx) override {\
       std::shared_ptr<std::shared_ptr<FormulaNode>[]> empty;
       node.reset(new FormulaNode((ctx->getText()), empty, 0));
+      node->setType("int");
+      node->setSubTreeType(arith);
       return nullptr;
     }
 
@@ -166,3 +186,4 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       node.reset(new FormulaNode((ctx->content)->getText(), children, 0));        
     }
 };
+

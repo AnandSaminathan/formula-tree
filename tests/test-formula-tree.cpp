@@ -15,4 +15,5 @@ int main() {
   FormulaNode root = tree.getRoot();
   print(root);
   assert(content == "G()->()>=x10y");
+  assert(root.getSubTreeType() == ltl);
 }

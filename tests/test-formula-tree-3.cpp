@@ -18,4 +18,5 @@ int main() {
   FormulaNode root = tree.getRoot();
   print(root);
   assert(content == "==+()&&==atrue==btrue()->()==ctrue()==dfalse1");
+  assert(root.getSubTreeType() == pb);
 }

@@ -16,4 +16,5 @@ int main() {
   FormulaNode root = tree.getRoot();
   print(root);
   assert(content == "()&&==atrue==btrue");
+  assert(root.getSubTreeType() == pl);
 }
