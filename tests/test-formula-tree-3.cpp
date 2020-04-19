@@ -11,12 +11,15 @@ void print(FormulaNode cur) {
 }
 
 int main() {
-  std::string t1 = "(a == true && b == true)";
-  std::string t2 = "((c == true) -> (d == false))";
-  std::string pseudoBoolean = t1 + " + " + t2 + " == 1"; 
+  std::string t1 = "(a && b)";
+  std::string t2 = "(b && c)";
+  std::string t3 = "(c && a)";
+  std::string t4 = "(b && a)";
+  std::string t5 = "(a && c)";
+  std::string pseudoBoolean = t1 + " + " + t2 + " - 3 * " + t3 + " + 4 * " + t4 + " - " + t5 + " <= 2";
   FormulaTree tree(pseudoBoolean);
   FormulaNode root = tree.getRoot();
   print(root);
-  assert(content == "==+()&&==atrue==btrue()->()==ctrue()==dfalse1");
+  assert(content == "<=-+-+()&&ab()&&bc*3()&&ca*4()&&ba()&&ac2");
   assert(root.getSubTreeType() == pb);
 }
