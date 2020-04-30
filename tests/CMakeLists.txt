@@ -1,72 +1,28 @@
-add_executable(test-sample-formula test-sample-formula.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-formula-tree test-formula-tree.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-leaf-configs test-leaf-configs.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-leaf-configs-2 test-leaf-configs-2.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-nnf test-nnf.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-nnf-2 test-nnf-2.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-nnf-3 test-nnf-3.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-propositional-formula test-propositional-formula.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-pseudo-boolean-formula test-pseudo-boolean-formula.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-substitute test-substitute.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-substitute-2 test-substitute-2.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-performance test-performance.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-formula-tree-2 test-formula-tree-2.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
-add_executable(test-formula-tree-3 test-formula-tree-3.cpp
-               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
-               ${ANTLR_GrammarParser_CXX_OUTPUTS}
-               ${SOURCE})
+cmake_minimum_required(VERSION 3.7)
 
+add_library(catch2_main STATIC catch-main.cpp)
+target_include_directories(catch2_main PUBLIC ${PROJECT_SOURCE_DIR}/tests/catch2) 
 
-target_link_libraries(test-sample-formula antlr4_static)
-target_link_libraries(test-formula-tree antlr4_static)
-target_link_libraries(test-leaf-configs antlr4_static)
-target_link_libraries(test-leaf-configs-2 antlr4_static)
-target_link_libraries(test-nnf antlr4_static)
-target_link_libraries(test-nnf-2 antlr4_static)
-target_link_libraries(test-nnf-3 antlr4_static)
-target_link_libraries(test-pseudo-boolean-formula antlr4_static)
-target_link_libraries(test-propositional-formula antlr4_static)
-target_link_libraries(test-substitute antlr4_static)
-target_link_libraries(test-substitute-2 antlr4_static)
-target_link_libraries(test-performance antlr4_static)
-target_link_libraries(test-formula-tree-2 antlr4_static)
-target_link_libraries(test-formula-tree-3 antlr4_static)
+set(TEST_LIST 
+    formula-tree
+   )
+
+foreach(NAME IN LISTS TEST_LIST)
+  list(APPEND TEST_SOURCE_LIST test-${NAME}.cpp)
+endforeach()
+
+set(TARGET_NAME tests)
+
+add_executable(${TARGET_NAME}
+               ${ANTLR_GrammarLexer_CXX_OUTPUTS}
+               ${ANTLR_GrammarParser_CXX_OUTPUTS}
+               ${TEST_SOURCE_LIST}
+               ${SOURCE}
+              )
+            target_include_directories(${TARGET_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/tests/catch2)
+target_link_libraries(${TARGET_NAME} catch2_main)
+target_link_libraries(${TARGET_NAME} antlr4_static)
+
+add_test(NAME ${TARGET_NAME}
+         COMMAND ${TARGET_NAME} 
+        )

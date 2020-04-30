@@ -59,5 +59,6 @@ add_custom_command(TARGET formula-tree POST_BUILD
   $<TARGET_FILE_DIR:formula-tree>)
 
 if(WITH_TEST)
+  enable_testing()
   add_subdirectory(tests)
 endif(WITH_TEST)
