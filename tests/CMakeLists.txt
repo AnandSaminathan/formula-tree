@@ -21,7 +21,7 @@ add_executable(${TARGET_NAME}
               )
             target_include_directories(${TARGET_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/tests/catch2)
 target_link_libraries(${TARGET_NAME} catch2_main)
-target_link_libraries(${TARGET_NAME} antlr4_static)
+target_link_libraries(${TARGET_NAME} antlr4_shared)
 
 add_test(NAME ${TARGET_NAME}
          COMMAND ${TARGET_NAME} 

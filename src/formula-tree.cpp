@@ -63,6 +63,10 @@ std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
   return nullptr;
 }
 
+
+FormulaNode FormulaNode::getChild(int child) { assertChild(child); return (*children[child]); }
+std::shared_ptr<FormulaNode> FormulaNode::getPointerToChild(int child) { assertChild(child); return (children[child]); }
+
 void FormulaTree::constructNNF() {
   complement["&&"] = "||";
   complement["||"] = "&&";
