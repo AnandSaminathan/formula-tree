@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Linux CI
 
 on:
   push:
@@ -14,9 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: mkdir build && cd build && cmake -DWITH_TEST=ON ..
+      run: mkdir build && cd build && cmake ..
     - name: build
       run: cmake --build build
+    - name: build test
+      run: cd build && cmake -DWITH_TEST=ON .. && make
     - name: test
       run: cd build && ctest
 
