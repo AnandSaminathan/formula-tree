@@ -17,6 +17,12 @@ jobs:
       uses: jwlawson/actions-setup-cmake@v1.2
       with:
         cmake-version: '3.7.x'
+    - name: install pkg-config
+      run: sudo apt-get install pkg-config
+    - name: install uuid-dev
+      run: sudo apt-get install uuid-dev
+    - name: install antlr4
+      run: sudo apt-get install antlr4
     - name: configure
       run: mkdir build && cd build && cmake ..
     - name: build
