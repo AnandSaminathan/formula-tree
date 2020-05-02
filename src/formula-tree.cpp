@@ -6,6 +6,10 @@
 #include "formula-tree/formula-tree.h"
 
 #include <map>
+#include <future>
+#include <memory>
+#include <vector>
+#include <thread>
 
 using namespace antlr4;
 using namespace antlr4::atn;
@@ -28,39 +32,41 @@ void FormulaTree::constructTree() {
 
 std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
   if(cur.isLeaf()) { 
-    return std::shared_ptr<FormulaNode>(new FormulaNode(cur));
+    return std::make_shared<FormulaNode>(cur);
   }
 
   std::string content = cur.getContent();
   if(content == "!") { return nnfConstruct(cur.getChild(0), !negate); }
   if(content == "->") {
-    std::shared_ptr<FormulaNode> left, right;
+    std::future<std::shared_ptr<FormulaNode>> left_future, right_future;
     std::string op;
+    left_future = std::async(nnfConstruct, cur.getChild(0), false);
+    right_future = std::async(nnfConstruct, cur.getChild(1), true);
     if(negate) {
-      left = nnfConstruct(cur.getChild(0), !negate);
-      right = nnfConstruct(cur.getChild(1), negate);
       op = "&&";
     } else {
-      left = nnfConstruct(cur.getChild(0), negate);
-      right = nnfConstruct(cur.getChild(1), !negate);
       op = "||";
     }
     std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
-    children[0] = left; children[1] = right;
-    return std::shared_ptr<FormulaNode>(new FormulaNode(op, children, 2));
+    children[0] = left_future.get(); children[1] = right_future.get();
+    return std::make_shared<FormulaNode>(op, children, 2);
   }
 
   int childrenCount = cur.getChildrenCount();
   std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[childrenCount]);
-  for(int i = 0; i < childrenCount; ++i) { children[i] = nnfConstruct(cur.getChild(i), negate); }
-
-  if(negate && complement.find(content) != complement.end()) { 
-    return std::shared_ptr<FormulaNode>(new FormulaNode(complement[content], children, childrenCount)); 
-  } else { 
-    return std::shared_ptr<FormulaNode>(new FormulaNode(content, children, childrenCount)); 
+  std::vector<std::future<std::shared_ptr<FormulaNode>>> children_futures(childrenCount);
+  for(int i = 0; i < childrenCount; ++i) { 
+    children_futures[i] = std::async(nnfConstruct, cur.getChild(i), negate); 
+  }
+  for(int i = 0;i < childrenCount; i++) {
+    children[i] = children_futures[i].get();
   }
 
-  return nullptr;
+  if(negate && complement.find(content) != complement.end()) { 
+    return std::make_shared<FormulaNode>(complement[content], children, childrenCount);
+  } else { 
+    return std::make_shared<FormulaNode>(content, children, childrenCount);
+  }
 }
 
 
@@ -116,9 +122,12 @@ void makeSubstitution(std::shared_ptr<FormulaNode> root, std::map<std::string, s
   }
 
   int count = root->getChildrenCount();
+  std::vector<std::thread> make_substitution_future(count);
   for(int i = 0; i < count; ++i) {
-    makeSubstitution(root->getPointerToChild(i), mapper);
+    make_substitution_future.emplace_back(std::thread([&]{makeSubstitution(root->getPointerToChild(i), mapper);}));
   }
+  for(std::thread &i: make_substitution_future)
+    if(i.joinable()) i.join();
 }
 
 void FormulaTree::substitute(std::map<std::string, std::string>& mapper) {

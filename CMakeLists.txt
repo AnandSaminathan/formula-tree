@@ -46,7 +46,7 @@ target_include_directories(formula-tree PRIVATE ${ANTLR4_INCLUDE_DIRS}
                           ${PROJECT_SOURCE_DIR}/include
                           ${ANTLR_GrammarLexer_OUTPUT_DIR}
                           ${ANTLR_GrammarParser_OUTPUT_DIR})
-target_link_libraries(formula-tree antlr4_shared)
+target_link_libraries(formula-tree antlr4_shared pthread)
 
 add_custom_command(TARGET formula-tree POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
