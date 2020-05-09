@@ -22,40 +22,43 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr;
     }
 
-    antlrcpp::Any visitPropParentheses(FormulaParser::PropParenthesesContext *ctx) override {
+    antlrcpp::Any visitPropParenthesis(FormulaParser::PropParenthesisContext *ctx) override {
       handleParenthesis(ctx);
       node->setSubTreeType(pl);
       return nullptr;
     }
 
-    antlrcpp::Any visitPseudoBoolBinary(FormulaParser::PseudoBoolBinaryContext *ctx) override {
+    antlrcpp::Any visitPseudoBoolCoeff(FormulaParser::PseudoBoolCoeffContext *ctx) override {
       handleBinary(ctx);
       node->setSubTreeType(pb);
       return nullptr;
     }
 
-    antlrcpp::Any visitPseudoArithBase(FormulaParser::PseudoArithBaseContext *ctx) override {
-      visit(ctx->propForm());
-      auto coeff = ctx->wholeNumber();
-      if(coeff != nullptr) {
-        std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
-        std::shared_ptr<std::shared_ptr<FormulaNode>[]> empty;
-        children[0].reset(new FormulaNode(coeff->getText(), empty, 0));
-        children[0]->setType("int");
-        children[1] = node;
-        node.reset(new FormulaNode("*", children, 2));
-      }
-      node->setSubTreeType(pb);
-      return nullptr;
-    }
-
-    antlrcpp::Any visitPseudoArithBinary(FormulaParser::PseudoArithBinaryContext *ctx) override {
+    antlrcpp::Any visitPseudoBoolIneqBinary(FormulaParser::PseudoBoolIneqBinaryContext *ctx) override {
       handleBinary(ctx);
       node->setSubTreeType(pb);
       return nullptr;
     }
 
-    antlrcpp::Any visitPseudoArithParentheses(FormulaParser::PseudoArithParenthesesContext *ctx) override {
+    antlrcpp::Any visitPseudoBoolLogicalBinary(FormulaParser::PseudoBoolLogicalBinaryContext *ctx) override {
+      handleBinary(ctx);
+      node->setSubTreeType(pl);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPseudoBoolLogicalUnary(FormulaParser::PseudoBoolLogicalUnaryContext *ctx) override {
+      handleUnary(ctx);
+      node->setSubTreeType(pl);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPseudoBoolArithBinary(FormulaParser::PseudoBoolArithBinaryContext *ctx) override {
+      handleBinary(ctx);
+      node->setSubTreeType(pb);
+      return nullptr;
+    }
+
+    antlrcpp::Any visitPseudoBoolParenthesis(FormulaParser::PseudoBoolParenthesisContext *ctx) override {
       handleParenthesis(ctx);
       node->setSubTreeType(pb);
       return nullptr;
@@ -73,7 +76,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr; 
     }
 
-    antlrcpp::Any visitLtlParentheses(FormulaParser::LtlParenthesesContext *ctx) override {
+    antlrcpp::Any visitLtlParenthesis(FormulaParser::LtlParenthesisContext *ctx) override {
       handleParenthesis(ctx);
       node->setSubTreeType(ltl);
       return nullptr;
@@ -93,7 +96,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr;
     }
 
-    antlrcpp::Any visitRelationalParentheses(FormulaParser::RelationalParenthesesContext *ctx) override { 
+    antlrcpp::Any visitRelationalParenthesis(FormulaParser::RelationalParenthesisContext *ctx) override { 
       handleParenthesis(ctx); 
       node->setSubTreeType(rel);
       return nullptr; 
@@ -105,7 +108,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr;
     }
 
-    antlrcpp::Any visitArithmeticParentheses(FormulaParser::ArithmeticParenthesesContext *ctx) override {
+    antlrcpp::Any visitArithmeticParenthesis(FormulaParser::ArithmeticParenthesisContext *ctx) override {
       handleParenthesis(ctx);
       node->setSubTreeType(arith);
       return nullptr;

@@ -47,7 +47,7 @@ TEST_CASE("formula tree structure", "[formula-tree]") {
 }
 
 TEST_CASE("negation normal form", "[nnf]") {
-  SECTION("example 1") {
+  SECTION("test 1") {
 
     FormulaTree tree("!G((a == true && b == false && c == false) || (a == false && b == true && c == false) || (a == false && b == false && c == true))");
     FormulaNode root = tree.getRoot();
@@ -60,7 +60,7 @@ TEST_CASE("negation normal form", "[nnf]") {
     REQUIRE(content == "F()&&&&()||||!=atrue!=bfalse!=cfalse()||||!=afalse!=btrue!=cfalse()||||!=afalse!=bfalse!=ctrue");
   }
 
-  SECTION("example 2") {
+  SECTION("test 2") {
 
     FormulaTree tree("!G((p3 == 0) -> (p2 == 1 && p5 == 1))");
     FormulaTree tree2("!G(next_p1 == p1 - 2)");
@@ -81,7 +81,7 @@ TEST_CASE("negation normal form", "[nnf]") {
     REQUIRE(content == "F()!=next_p1-p12");
   }
 
-  SECTION("example 3") {
+  SECTION("test 3") {
 
     FormulaTree tree("!(a U b)");
     FormulaNode root = tree.getRoot();
@@ -94,3 +94,30 @@ TEST_CASE("negation normal form", "[nnf]") {
     REQUIRE(content == "()Rab");
   }
 }
+
+TEST_CASE("mixed formulas", "[mixed]") {
+  SECTION("test 1") {
+    std::string pseudo1 = "(a && b) + (b && c) == 1";
+    std::string prop1 = "(a && b)";
+    std::string pseudo2 = "(d <= 2 && e + d == 2) + (a && d == 4) + (d > 4 && !b) <= 2";
+    std::string prop2 = "!a || !c";
+    std::string formula = pseudo1 + " || " + prop1 + " && !" + pseudo2 + " || !" + prop2;
+    FormulaTree tree(formula);
+    FormulaNode root = tree.getRoot();
+    REQUIRE(root.getSubTreeType() == pl);
+    REQUIRE(root.getChild(0).getChild(0).getSubTreeType() == pb);
+  }
+
+  SECTION("test 2") {
+    std::string formula = "!((a && b) + (b && c) <= 1) && (a || c) && (b + c == 1)";
+    FormulaTree tree(formula);
+    FormulaNode root = tree.getRoot();
+    content = "";
+    print(root);
+    REQUIRE(content == "&&&&!()<=+()&&ab()&&bc1()||ac()==+bc1");
+    REQUIRE(root.getSubTreeType() == pl);
+    REQUIRE(root.getChild(0).getSubTreeType() == pl);
+    REQUIRE(root.getChild(0).getChild(0).getChild(0).getSubTreeType() == pb);
+  }
+}
+
