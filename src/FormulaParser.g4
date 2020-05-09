@@ -15,19 +15,19 @@ propForm          : relationalForm                              #propBase
                   | left=propForm op=AND right=propForm         #propBinary
                   | left=propForm op=OR right=propForm          #propBinary
                   | left=propForm op=IMPLIES right=propForm     #propBinary
-                  | left=propForm op=EQUIVALENT right=propForm  #propBinary
+                  | left=propForm op=EQ right=propForm          #propBinary
                   ;
 
-pseudoBoolForm    : relationalForm                                                             #pseudoBoolBase 
-                  | OPEN_PARAN formula=pseudoBoolForm CLOSE_PARAN                              #pseudoBoolParenthesis
-                  | op=NOT formula=pseudoBoolForm                                              #pseudoBoolLogicalUnary
-                  | left=pseudoBoolForm op=AND right=pseudoBoolForm                            #pseudoBoolLogicalBinary
-                  | left=pseudoBoolForm op=OR right=pseudoBoolForm                             #pseudoBoolLogicalBinary
-                  | left=pseudoBoolForm op=IMPLIES right=pseudoBoolForm                        #pseudoBoolLogicalBinary
-                  | left=pseudoBoolForm op=EQUIVALENT right=pseudoBoolForm                     #pseudoBoolLogicalBinary
-                  | left=wholeNumber op=MUL right=pseudoBoolForm                               #pseudoBoolCoeff
-                  | left=pseudoBoolForm op=(PLUS | MINUS) right=pseudoBoolForm                 #pseudoBoolArithBinary
-                  | left=pseudoBoolForm op=(LT | GT | LTE | GTE | EQ | NEQ) right=wholeNumber  #pseudoBoolIneqBinary
+pseudoBoolForm    : relationalForm                                                 #pseudoBoolBase 
+                  | OPEN_PARAN formula=pseudoBoolForm CLOSE_PARAN                  #pseudoBoolParenthesis
+                  | op=NOT formula=pseudoBoolForm                                  #pseudoBoolLogicalUnary
+                  | left=pseudoBoolForm op=AND right=pseudoBoolForm                #pseudoBoolLogicalBinary
+                  | left=pseudoBoolForm op=OR right=pseudoBoolForm                 #pseudoBoolLogicalBinary
+                  | left=pseudoBoolForm op=IMPLIES right=pseudoBoolForm            #pseudoBoolLogicalBinary
+                  | left=wholeNumber op=MUL right=pseudoBoolForm                   #pseudoBoolCoeff
+                  | left=pseudoBoolForm op=(PLUS | MINUS) right=pseudoBoolForm     #pseudoBoolArithBinary
+                  | left=pseudoBoolForm op=(LT | GT | LTE | GTE) right=wholeNumber #pseudoBoolIneqBinary
+                  | left=pseudoBoolForm op=(EQ | NEQ) right=pseudoBoolForm         #pseudoBoolLogicalBinary
                   ;
 
 ltlForm           : relationalForm                                    #ltlBase
@@ -41,7 +41,7 @@ ltlForm           : relationalForm                                    #ltlBase
                   | left=ltlForm op=AND right=ltlForm                 #ltlBinary
                   | left=ltlForm op=OR right=ltlForm                  #ltlBinary
                   | left=ltlForm op=IMPLIES right=ltlForm             #ltlBinary
-                  | left=ltlForm op=EQUIVALENT right=ltlForm          #ltlBinary
+                  | left=ltlForm op=EQ right=ltlForm                  #ltlBinary
                   ;
 
 relationalForm    : content=logicalValue                                              #relationalValue

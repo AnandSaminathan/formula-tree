@@ -121,3 +121,35 @@ TEST_CASE("mixed formulas", "[mixed]") {
   }
 }
 
+TEST_CASE("equal operator", "[equals]") {
+  SECTION("pl") {
+    std::string formula = "(a == !b)";
+    FormulaTree tree(formula);
+    FormulaNode root = tree.getRoot();
+    content = "";
+    print(root);
+    REQUIRE(content == "()==a!b");
+    REQUIRE(root.getSubTreeType() == pl);
+  }
+
+  SECTION("ltl") {
+    std::string formula = "(G(a && b) == !F(b && c))";
+    FormulaTree tree(formula);
+    FormulaNode root = tree.getRoot();
+    content = "";
+    print(root);
+    REQUIRE(content == "()==G()&&ab!F()&&bc");
+    REQUIRE(root.getSubTreeType() == ltl);
+  }
+
+  SECTION("pb") {
+    std::string formula = "((a && b) + (!c && d) == 1) == (b + c < 2)";
+    FormulaTree tree(formula);
+    FormulaNode root = tree.getRoot();
+    content = "";
+    print(root);
+    REQUIRE(content == "==()==+()&&ab()&&!cd1()<+bc2");
+  }
+}
+
+
