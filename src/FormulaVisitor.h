@@ -42,13 +42,13 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
 
     antlrcpp::Any visitPseudoBoolLogicalBinary(FormulaParser::PseudoBoolLogicalBinaryContext *ctx) override {
       handleBinary(ctx);
-      node->setSubTreeType(pl);
+      node->setSubTreeType(pb);
       return nullptr;
     }
 
     antlrcpp::Any visitPseudoBoolLogicalUnary(FormulaParser::PseudoBoolLogicalUnaryContext *ctx) override {
       handleUnary(ctx);
-      node->setSubTreeType(pl);
+      node->setSubTreeType(pb);
       return nullptr;
     }
 

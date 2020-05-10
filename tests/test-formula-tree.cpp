@@ -104,7 +104,7 @@ TEST_CASE("mixed formulas", "[mixed]") {
     std::string formula = pseudo1 + " || " + prop1 + " && !" + pseudo2 + " || !" + prop2;
     FormulaTree tree(formula);
     FormulaNode root = tree.getRoot();
-    REQUIRE(root.getSubTreeType() == pl);
+    REQUIRE(root.getSubTreeType() == pb);
     REQUIRE(root.getChild(0).getChild(0).getSubTreeType() == pb);
   }
 
@@ -115,8 +115,8 @@ TEST_CASE("mixed formulas", "[mixed]") {
     content = "";
     print(root);
     REQUIRE(content == "&&&&!()<=+()&&ab()&&bc1()||ac()==+bc1");
-    REQUIRE(root.getSubTreeType() == pl);
-    REQUIRE(root.getChild(0).getSubTreeType() == pl);
+    REQUIRE(root.getSubTreeType() == pb);
+    REQUIRE(root.getChild(0).getSubTreeType() == pb);
     REQUIRE(root.getChild(0).getChild(0).getChild(0).getSubTreeType() == pb);
   }
 }
@@ -149,6 +149,7 @@ TEST_CASE("equal operator", "[equals]") {
     content = "";
     print(root);
     REQUIRE(content == "==()==+()&&ab()&&!cd1()<+bc2");
+    REQUIRE(root.getSubTreeType() == pb);
   }
 }
 
