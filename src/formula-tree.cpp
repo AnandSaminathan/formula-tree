@@ -28,7 +28,13 @@ void FormulaTree::constructTree() {
 
 std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
   if(cur.isLeaf()) { 
-    return std::shared_ptr<FormulaNode>(new FormulaNode(cur));
+    if(negate) {
+      std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[1]);
+      children[0] = std::shared_ptr<FormulaNode>(new FormulaNode(cur));
+      return std::shared_ptr<FormulaNode>(new FormulaNode("!", children, 1));
+    } else {
+      return std::shared_ptr<FormulaNode>(new FormulaNode(cur));
+    }
   }
 
   std::string content = cur.getContent();
@@ -36,15 +42,10 @@ std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
   if(content == "->") {
     std::shared_ptr<FormulaNode> left, right;
     std::string op;
-    if(negate) {
-      left = nnfConstruct(cur.getChild(0), !negate);
-      right = nnfConstruct(cur.getChild(1), negate);
-      op = "&&";
-    } else {
-      left = nnfConstruct(cur.getChild(0), negate);
-      right = nnfConstruct(cur.getChild(1), !negate);
-      op = "||";
-    }
+    left = nnfConstruct(cur.getChild(0), !negate);
+    right = nnfConstruct(cur.getChild(1), negate);
+    if(negate) { op = "&&"; } 
+    else { op = "||"; }
     std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[2]);
     children[0] = left; children[1] = right;
     return std::shared_ptr<FormulaNode>(new FormulaNode(op, children, 2));
@@ -52,9 +53,14 @@ std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
 
   int childrenCount = cur.getChildrenCount();
   std::shared_ptr<std::shared_ptr<FormulaNode>[]> children(new std::shared_ptr<FormulaNode>[childrenCount]);
+
+  bool found = negate && complement.find(content) != complement.end();
+  bool rel = (content == ">" or content == "<" or content == ">=" or content == "<=" or content == "!=" or content == "==");
+  bool eqpl = (content == "==" and cur.getChild(0).getSubTreeType() == pl);
+  if(rel && found && !eqpl) { negate = false; }
   for(int i = 0; i < childrenCount; ++i) { children[i] = nnfConstruct(cur.getChild(i), negate); }
 
-  if(negate && complement.find(content) != complement.end()) { 
+  if(found && !eqpl) { 
     return std::shared_ptr<FormulaNode>(new FormulaNode(complement[content], children, childrenCount)); 
   } else { 
     return std::shared_ptr<FormulaNode>(new FormulaNode(content, children, childrenCount)); 

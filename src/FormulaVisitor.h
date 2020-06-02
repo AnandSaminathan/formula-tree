@@ -144,7 +144,7 @@ class FormulaVisitor : public FormulaParserBaseVisitor {
       return nullptr;
     }
 
-    antlrcpp::Any visitWholeNumber(FormulaParser::WholeNumberContext *ctx) override {\
+    antlrcpp::Any visitWholeNumber(FormulaParser::WholeNumberContext *ctx) override {
       std::shared_ptr<std::shared_ptr<FormulaNode>[]> empty;
       node.reset(new FormulaNode((ctx->getText()), empty, 0));
       node->setType("int");

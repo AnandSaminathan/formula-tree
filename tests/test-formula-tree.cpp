@@ -91,7 +91,28 @@ TEST_CASE("negation normal form", "[nnf]") {
     FormulaNode nnfRoot = tree.getNNFRoot();
     content = "";
     print(nnfRoot);  
-    REQUIRE(content == "()Rab");
+    REQUIRE(content == "()R!a!b");
+  }
+
+  SECTION("test 4") {
+    FormulaTree tree("!(a && b && c == true && d == false && e)");
+    FormulaNode root = tree.getRoot();
+
+    tree.makeNNF();
+    FormulaNode nnfRoot = tree.getNNFRoot();
+    content = "";
+    print(nnfRoot);
+    REQUIRE(content == "()||||||||!a!b!=ctrue!=dfalse!e");
+  }
+
+  SECTION("test 5") {
+    FormulaTree tree("!((a -> b) && !(b -> a))");
+    FormulaNode root = tree.getRoot();
+    tree.makeNNF();
+    FormulaNode nnfRoot = tree.getNNFRoot();
+    content = "";
+    print(nnfRoot);
+    REQUIRE(content == "()||()&&a!b()||!ba");
   }
 }
 
