@@ -56,7 +56,7 @@ std::shared_ptr<FormulaNode> nnfConstruct(FormulaNode cur, bool negate) {
 
   bool found = negate && complement.find(content) != complement.end();
   bool rel = (content == ">" or content == "<" or content == ">=" or content == "<=" or content == "!=" or content == "==");
-  bool eqpl = (content == "==" and cur.getChild(0).getSubTreeType() == pl);
+  bool eqpl = ((content == "==" or content == "!=")  and cur.getChild(0).getSubTreeType() == pl);
   if(rel && found && !eqpl) { negate = false; }
   for(int i = 0; i < childrenCount; ++i) { children[i] = nnfConstruct(cur.getChild(i), negate); }
 
