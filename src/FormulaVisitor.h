@@ -7,6 +7,8 @@
 
 #include "antlr4-runtime.h"
 
+using namespace ftree;
+
 class FormulaVisitor : public FormulaParserBaseVisitor {
   public:
 

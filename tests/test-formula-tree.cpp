@@ -1,6 +1,8 @@
 #include "formula-tree/formula-tree.h"
 #include "catch.hpp"
 
+using namespace ftree;
+
 std::string content = "";
 
 void print(FormulaNode cur) {
@@ -18,6 +20,7 @@ TEST_CASE("formula tree structure", "[formula-tree]") {
     print(root);
     REQUIRE(content == "G()->()>=x10y");
     REQUIRE(root.getSubTreeType() == ltl);
+    REQUIRE_THROWS_AS(root.getChild(-1), std::out_of_range);
   } 
 
   SECTION("pl formula") {
@@ -28,6 +31,7 @@ TEST_CASE("formula tree structure", "[formula-tree]") {
     print(root);
     REQUIRE(content == "()&&==atrue==btrue");
     REQUIRE(root.getSubTreeType() == pl);
+    REQUIRE_THROWS_AS(root.getChild(1), std::out_of_range);
   }
 
   SECTION("pb formula") {
@@ -43,6 +47,7 @@ TEST_CASE("formula tree structure", "[formula-tree]") {
     print(root);
     REQUIRE(content == "<=-+-+()&&ab()&&bc*3()&&ca*4()&&ba()&&ac2");
     REQUIRE(root.getSubTreeType() == pb);
+    REQUIRE_THROWS_AS(root.getChild(3), std::out_of_range);
   }
 }
 
