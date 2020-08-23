@@ -15,6 +15,6 @@ ExternalProject_Add(
 )
 ExternalProject_Get_Property(git_catch source_dir)
 
-add_library(catch2_main STATIC catch-main.cpp)
+add_library(catch2_main STATIC ${PROJECT_SOURCE_DIR}/cmake/catch-main.cpp)
 add_dependencies(catch2_main git_catch)
 target_include_directories(catch2_main PUBLIC ${source_dir}/single_include)
