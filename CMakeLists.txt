@@ -48,17 +48,30 @@ target_include_directories(formula-tree PRIVATE ${ANTLR4_INCLUDE_DIRS}
                           ${ANTLR_GrammarParser_OUTPUT_DIR})
 target_link_libraries(formula-tree antlr4_shared)
 
-add_custom_command(TARGET formula-tree POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  "${ANTLR4_ROOT}/runtime/Cpp/dist/libantlr4-runtime.so.4.8"
-  $<TARGET_FILE_DIR:formula-tree>)
-
-add_custom_command(TARGET formula-tree POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_if_different
-  "${ANTLR4_ROOT}/runtime/Cpp/dist/libantlr4-runtime.so"
-  $<TARGET_FILE_DIR:formula-tree>)
-
 if(WITH_TEST)
   enable_testing()
   add_subdirectory(tests)
 endif(WITH_TEST)
+
+set(POST_BUILD_INCLUDE_DIRECTORY $<TARGET_FILE_DIR:formula-tree>/include)
+set(POST_BUILD_BIN_DIRECTORY $<TARGET_FILE_DIR:formula-tree>/bin)
+
+add_custom_command(TARGET formula-tree POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  "${PROJECT_SOURCE_DIR}/include"
+  ${POST_BUILD_INCLUDE_DIRECTORY})
+
+add_custom_command(TARGET formula-tree POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  "${ANTLR4_ROOT}/runtime/Cpp/dist"
+  ${POST_BUILD_BIN_DIRECTORY})
+
+add_custom_command(TARGET formula-tree POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy
+  $<TARGET_FILE:formula-tree>
+  ${POST_BUILD_BIN_DIRECTORY})
+
+add_custom_command(TARGET formula-tree POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E tar "cfv" "formulatree-source.zip" --format=zip
+  ${POST_BUILD_INCLUDE_DIRECTORY}
+  ${POST_BUILD_BIN_DIRECTORY})
